@@ -7,12 +7,13 @@ const props = withDefaults(
         text: string;
         shop: string;
         image: string;
-        price: number;
+        price?: number;
         size: any;
     }>(),
     {
         editing: false,
         size: "md",
+        price: 0,
     }
 );
 
@@ -26,9 +27,9 @@ const formatPrice = (price: number | undefined) => {
 const item = tv({
     slots: {
         base: "w-full items-center flex overflow-hidden",
-        frame: "w-full flex flex-row bg-white rounded-xl justify-between items-center pr-4 overflow-hidden",
+        frame: "w-full flex flex-row bg-white dark:bg-neutral-700 rounded-xl justify-between items-center pr-4 overflow-hidden",
         image: "size-20",
-        text: "w-full flex flex-col items-start truncate",
+        text: "w-full flex flex-col items-start overflow-hidden",
     },
     variants: {
         size: {
@@ -49,26 +50,23 @@ const { frame, image, text } = item();
     <div :class="frame({ size: props.size })">
         <img :class="image({ size: props.size })" :src="props.image" />
         <div :class="text({ size: props.size })">
-            <a class="text-black text-md font-medium" href="">
+            <a class="text-black dark:text-white text-md font-medium truncate" href="">
                 {{ props.text }}
             </a>
-            <a class="text-neutral-700 text-sm font-medium" href="">
+            <a class="text-neutral-700 dark:text-neutral-300 text-sm font-medium truncate" href="">
                 {{ props.shop }}
             </a>
         </div>
 
         <div v-if="props.editing" class="flex gap-2 items-center">
-            <div class="text-neutral-800 text-md whitespace-nowrap">
+            <div class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap">
                 {{ formatPrice(props.price) }}
             </div>
-            <UPopover
-                :popper="{ placement: 'top' }"
-                :ui="{
-                    background: 'bg-white dark:bg-white',
-                    ring: 'ring-0',
-                    rounded: 'rounded-lg',
-                }"
-            >
+            <UPopover :popper="{ placement: 'right' }" :ui="{
+                background: 'bg-white dark:bg-white',
+                ring: 'ring-0',
+                rounded: 'rounded-lg',
+            }">
                 <template #panel>
                     <div class="px-3 py-2 flex flex-col gap-2">
                         <UButton>編集</UButton>
@@ -76,31 +74,20 @@ const { frame, image, text } = item();
                     </div>
                 </template>
                 <button
-                    class="flex items-center justify-center size-10 rounded-lg hover:bg-neutral-100"
-                >
-                    <Icon
-                        name="lucide:ellipsis-vertical"
-                        :width="18"
-                        :height="18"
-                        class="text-neutral-600 min-w-max min-h-max"
-                    />
+                    class="flex items-center justify-center size-10 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-600">
+                    <Icon name="lucide:ellipsis-vertical" :width="18" :height="18"
+                        class="text-neutral-600 dark:text-neutral-300 min-w-max min-h-max" />
                 </button>
             </UPopover>
         </div>
 
-        <button
-            v-if="!props.editing"
-            class="flex gap-3 items-center hover:bg-neutral-100 py-2 px-4 rounded-lg"
-        >
-            <div class="text-neutral-800 text-md whitespace-nowrap">
+        <button v-if="!props.editing"
+            class="flex gap-3 items-center hover:bg-neutral-100 dark:hover:bg-neutral-600 py-2 px-4 rounded-lg">
+            <div class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap">
                 {{ formatPrice(props.price) }}
             </div>
-            <Icon
-                name="lucide:external-link"
-                :width="18"
-                :height="18"
-                class="text-neutral-600 min-w-max min-h-max"
-            />
+            <Icon name="lucide:external-link" :width="18" :height="18"
+                class="text-neutral-600 dark:text-neutral-300 min-w-max min-h-max" />
         </button>
     </div>
 </template>

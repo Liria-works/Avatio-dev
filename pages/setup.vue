@@ -2,17 +2,8 @@
 import Title from "~/components/title.vue";
 import Item from "~/components/item.vue";
 import Tag from "~/components/tag.vue";
-import Header_avatio from "~/components/header.vue";
-import type { _padding } from "#tailwind-config/theme";
-
-const links = [
-    {
-        label: "ホーム",
-    },
-    {
-        label: "セットアップの詳細",
-    },
-];
+import Button_Custom from "~/components/button.vue";
+import Banner_avatio from "~/components/banner.vue";
 
 const modal_share = ref(false);
 const modal_report = ref(false);
@@ -23,20 +14,17 @@ const modal_report = ref(false);
         class="flex flex-col gap-10 pt-10"
         :ui="{ padding: 'px-8 sm:px-10 lg:px-16' }"
     >
-        <Header_avatio />
-
-        <div class="flex-col justify-start items-start gap-5 flex px-3">
-            <UBreadcrumb
-                :links="links"
-                :ui="{ active: 'text-neutral-700 dark:text-neutral-700' }"
-            />
-
-            <div class="flex-col justify-start items-start gap-5 flex w-full">
-                <div class="pr-4 items-center gap-7 flex flex-row">
-                    <div class="text-black text-2xl font-bold">
+        <div class="flex-col justify-start items-start gap-5 flex w-full px-3">
+            <div class="flex flex-row items-center justify-between w-full">
+                <div class="items-center gap-7 flex flex-row">
+                    <div class="text-black dark:text-white text-2xl font-bold">
                         普段使い改変
                     </div>
-                    <div class="text-black text-sm pt-0.5">3 アイテム</div>
+                    <div
+                        class="text-neutral-600 dark:text-neutral-400 text-sm pt-0.5"
+                    >
+                        3 アイテム
+                    </div>
                     <div class="flex flex-row gap-2">
                         <UPopover
                             :ui="{
@@ -53,16 +41,10 @@ const modal_report = ref(false);
                                     ring: 'ring-0',
                                 }"
                             >
-                                <button
-                                    class="flex p-2 items-center justify-center rounded-full hover:bg-neutral-200"
-                                >
-                                    <Icon
-                                        name="lucide:share-2"
-                                        :width="18"
-                                        :height="18"
-                                        class="text-neutral-600 pr-[2px] min-w-max min-h-max"
-                                    />
-                                </button>
+                                <Button_Custom
+                                    icon="lucide:share-2"
+                                    :iconSize="18"
+                                />
                             </UTooltip>
                             <template #panel="{ close }">
                                 <div class="p-8">
@@ -106,17 +88,11 @@ const modal_report = ref(false);
                                 ring: 'ring-0',
                             }"
                         >
-                            <button
-                                class="flex p-2 items-center justify-center rounded-full hover:bg-neutral-200"
+                            <Button_Custom
+                                icon="lucide:flag"
+                                :iconSize="18"
                                 @click="modal_report = true"
-                            >
-                                <Icon
-                                    name="lucide:flag"
-                                    :width="18"
-                                    :height="18"
-                                    class="text-neutral-600 min-w-max min-h-max"
-                                />
-                            </button>
+                            />
                         </UTooltip>
                         <UModal
                             v-model="modal_report"
@@ -138,192 +114,170 @@ const modal_report = ref(false);
                         </UModal>
                     </div>
                 </div>
-                <div class="items-start gap-8 flex w-full">
-                    <div class="flex-col items-center gap-8 flex w-full">
-                        <div class="flex-col items-start gap-3 flex w-full">
-                            <Title
-                                title="ベースアバター"
-                                icon="lucide:person-standing"
-                            />
-                            <Item
-                                text="アルナ -Alna-【オリジナル3Dモデル】"
-                                shop="アオノイド"
-                                image="https://booth.pximg.net/c/620x620/b78fdd20-b640-4c54-b8ac-49a54b61717f/i/5840911/1ceec8da-8aba-4157-9629-db325d169608_base_resized.jpg"
-                                :price="4000"
-                                size="lg"
-                            />
-                        </div>
-                        <div class="flex-col items-start gap-3 flex w-full">
-                            <Title title="衣装" icon="lucide:shirt" />
-                            <Item
-                                text="【複数アバター対応】怪獣着ぐるみ たつぐるみ"
-                                shop="sasappetito Paws"
-                                image="https://booth.pximg.net/e715aab8-6dd1-46e0-b0f9-f481cdaab0da/i/5929004/bd1da940-09ad-4bd8-89cb-3de5e040203c_base_resized.jpg"
-                                :price="1500"
-                                size="md"
-                                :editing="true"
-                            />
-                            <Item
-                                text="【複数アバター対応】怪獣着ぐるみ たつぐるみ"
-                                shop="sasappetito Paws"
-                                image="https://booth.pximg.net/e715aab8-6dd1-46e0-b0f9-f481cdaab0da/i/5929004/bd1da940-09ad-4bd8-89cb-3de5e040203c_base_resized.jpg"
-                                :price="1500"
-                                size="md"
-                            />
-                        </div>
-                        <div class="flex-col items-start gap-3 flex w-full">
-                            <Title title="アクセサリー" icon="lucide:star" />
-                            <Item
-                                text="チャームチョーカー // アバターアクセサリー"
-                                shop="Liria Graphics"
-                                image="https://booth.pximg.net/71691351-b285-40e7-af97-09cd9976f902/i/4758318/ad7ce9a5-5375-471a-bcfd-0b8b5bdda437_base_resized.jpg"
-                                :price="500"
-                                size="md"
-                            />
-                        </div>
+                <NuxtLink to="/">
+                    <Button_Custom icon="lucide:arrow-left" text="戻る" />
+                </NuxtLink>
+            </div>
+            <div class="items-start gap-8 flex w-full">
+                <div class="flex-col items-center gap-8 flex w-full">
+                    <div class="flex-col items-start gap-3 flex w-full">
+                        <Title
+                            title="ベースアバター"
+                            icon="lucide:person-standing"
+                        />
+                        <Item
+                            text="アルナ -Alna-【オリジナル3Dモデル】"
+                            shop="アオノイド"
+                            image="https://booth.pximg.net/c/620x620/b78fdd20-b640-4c54-b8ac-49a54b61717f/i/5840911/1ceec8da-8aba-4157-9629-db325d169608_base_resized.jpg"
+                            :price="4000"
+                            size="lg"
+                        />
                     </div>
+                    <div class="flex-col items-start gap-3 flex w-full">
+                        <Title title="衣装" icon="lucide:shirt" />
+                        <Item
+                            text="【複数アバター対応】怪獣着ぐるみ たつぐるみ"
+                            shop="sasappetito Paws"
+                            image="https://booth.pximg.net/e715aab8-6dd1-46e0-b0f9-f481cdaab0da/i/5929004/bd1da940-09ad-4bd8-89cb-3de5e040203c_base_resized.jpg"
+                            :price="1500"
+                            size="md"
+                            :editing="true"
+                        />
+                        <Item
+                            text="【複数アバター対応】怪獣着ぐるみ たつぐるみ"
+                            shop="sasappetito Paws"
+                            image="https://booth.pximg.net/e715aab8-6dd1-46e0-b0f9-f481cdaab0da/i/5929004/bd1da940-09ad-4bd8-89cb-3de5e040203c_base_resized.jpg"
+                            :price="1500"
+                            size="md"
+                        />
+                    </div>
+                    <div class="flex-col items-start gap-3 flex w-full">
+                        <Title title="アクセサリー" icon="lucide:star" />
+                        <Item
+                            text="チャームチョーカー // アバターアクセサリー"
+                            shop="Liria Graphics"
+                            image="https://booth.pximg.net/71691351-b285-40e7-af97-09cd9976f902/i/4758318/ad7ce9a5-5375-471a-bcfd-0b8b5bdda437_base_resized.jpg"
+                            :price="500"
+                            size="md"
+                        />
+                    </div>
+                </div>
+                <div
+                    class="w-96 flex-col justify-start items-start gap-16 inline-flex"
+                >
                     <div
-                        class="w-96 flex-col justify-start items-start gap-20 inline-flex"
+                        class="flex-col justify-start items-start gap-8 flex w-full"
                     >
                         <div
-                            class="flex-col justify-start items-start gap-8 flex w-full"
+                            class="self-stretch flex-col justify-start items-start gap-2 flex"
                         >
+                            <Title title="説明" icon="lucide:text" />
                             <div
-                                class="self-stretch flex-col justify-start items-start gap-2 flex"
+                                class="self-stretch px-3 py-2 bg-white dark:bg-neutral-700 rounded-xl items-center flex"
                             >
-                                <Title title="作者" icon="lucide:user-round" />
-                                <div
-                                    class="flex flex-row items-center justify-between pt-1 w-full"
+                                <span class="text-black dark:text-white text-sm"
+                                    >普段使っているアバターです。<br />かわいいものをたくさん使いました。</span
                                 >
-                                    <div
-                                        class="flex flex-row gap-3 items-center"
-                                    >
-                                        <UAvatar
-                                            src="https://avatars.githubusercontent.com/u/47878070?v=4"
-                                            alt="Avatar"
-                                        />
-                                        <span
-                                            class="text-black pb-0.5 text-left"
-                                        >
-                                            Liry24
-                                        </span>
-                                    </div>
-                                    <div
-                                        class="flex flex-row gap-1 items-center"
-                                    >
-                                        <button
-                                            class="size-9 flex items-center justify-center rounded-full hover:bg-neutral-200"
-                                        >
-                                            <Icon
-                                                name="tabler:badge-vr-filled"
-                                                :width="24"
-                                                :height="24"
-                                                class="text-black"
-                                            />
-                                        </button>
-                                        <button
-                                            class="size-9 flex items-center justify-center rounded-full hover:bg-neutral-200"
-                                        >
-                                            <Icon
-                                                name="simple-icons:x"
-                                                :width="18"
-                                                :height="18"
-                                                class="text-black"
-                                            />
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                        <div
+                            class="self-stretch flex-col justify-start items-start gap-2 flex"
+                        >
+                            <Title title="作者" icon="lucide:user-round" />
                             <div
-                                class="self-stretch flex-col justify-start items-start gap-2 flex"
+                                class="flex flex-row items-center justify-between pt-1 w-full"
                             >
-                                <Title title="説明" icon="lucide:text" />
-                                <div
-                                    class="self-stretch px-3 py-2 bg-white rounded-xl items-center flex"
-                                >
-                                    <span class="text-black text-sm"
-                                        >普段使っているアバターです。<br />かわいいものをたくさん使いました。</span
+                                <div class="flex flex-row gap-3 items-center">
+                                    <UAvatar
+                                        src="https://avatars.githubusercontent.com/u/47878070?v=4"
+                                        alt="Avatar"
+                                    />
+                                    <span
+                                        class="text-black dark:text-white pb-0.5 text-left"
                                     >
+                                        Liry24
+                                    </span>
                                 </div>
-                            </div>
-                            <div
-                                class="self-stretch flex-col justify-start items-start gap-2.5 flex w-full"
-                            >
-                                <Title title="タグ" icon="lucide:tags" />
-                                <div
-                                    class="justify-start items-center gap-1.5 flex flex-row flex-wrap"
-                                >
-                                    <Tag text="かわいい" />
-                                    <Tag text="ガーリー" />
-                                    <Tag text="普段使い" />
-                                    <Tag text="ショートヘア" />
-                                </div>
-                            </div>
-                            <div
-                                class="self-stretch h-[65px] flex-col justify-start items-start gap-2.5 flex"
-                            >
-                                <Title
-                                    title="コンテンツ"
-                                    icon="lucide:package"
+                                <Button_Custom
+                                    icon="lucide:link"
+                                    :iconSize="18"
                                 />
-                                <div
-                                    class="justify-start items-center gap-1.5 flex flex-row flex-wrap"
+                            </div>
+                        </div>
+                        <div
+                            class="self-stretch flex-col justify-start items-start gap-2.5 flex w-full"
+                        >
+                            <Title title="タグ" icon="lucide:tags" />
+                            <div
+                                class="justify-start items-center gap-1.5 flex flex-row flex-wrap"
+                            >
+                                <Tag text="かわいい" />
+                                <Tag text="ガーリー" />
+                                <Tag text="普段使い" />
+                                <Tag text="ショートヘア" />
+                            </div>
+                        </div>
+                        <div
+                            class="self-stretch h-[65px] flex-col justify-start items-start gap-2.5 flex"
+                        >
+                            <Title title="コンテンツ" icon="lucide:package" />
+                            <div
+                                class="justify-start items-center gap-1.5 flex flex-row flex-wrap"
+                            >
+                                <UPopover
+                                    mode="hover"
+                                    :popper="{ placement: 'top' }"
                                 >
-                                    <UPopover
-                                        mode="hover"
-                                        :popper="{ placement: 'top' }"
-                                    >
-                                        <template #panel>
-                                            <div
-                                                class="px-3 py-2 text-xs bg-neutral-700"
-                                            >
-                                                性的表現を含むアイテムがリストされています。
-                                            </div>
-                                        </template>
-                                        <Tag
-                                            color="pink"
-                                            text="NSFW"
-                                            icon="lucide:heart"
-                                        />
-                                    </UPopover>
-                                    <UPopover
-                                        mode="hover"
-                                        :popper="{ placement: 'top' }"
-                                    >
-                                        <template #panel>
-                                            <div
-                                                class="px-3 py-2 text-xs bg-neutral-700"
-                                            >
-                                                ベースアバターに対して公式に対応が行われていないアイテムがリストされています。<br />
-                                                UnityやDCCツール（Blenderなど）で独自の対応が行われている場合があります。
-                                            </div>
-                                        </template>
-                                        <Tag
-                                            color="secondary"
-                                            text="アバター非対応アイテム"
-                                            icon="lucide:hammer"
-                                        />
-                                    </UPopover>
-                                    <UPopover
-                                        mode="hover"
-                                        :popper="{ placement: 'top' }"
-                                    >
-                                        <template #panel>
-                                            <div
-                                                class="px-3 py-2 text-xs bg-neutral-700"
-                                            >
-                                                一部のアイテムが情報の取得に失敗しています。<br />
-                                                これらのアイテムは非公開になっているか、<br />
-                                                既に販売が終了している可能性があります。
-                                            </div>
-                                        </template>
-                                        <Tag
-                                            color="secondary"
-                                            text="リンク切れアイテム"
-                                            icon="lucide:unlink"
-                                        />
-                                    </UPopover>
-                                </div>
+                                    <template #panel>
+                                        <div
+                                            class="px-3 py-2 text-xs bg-neutral-700"
+                                        >
+                                            性的表現を含むアイテムがリストされています。
+                                        </div>
+                                    </template>
+                                    <Tag
+                                        color="pink"
+                                        text="NSFW"
+                                        icon="lucide:heart"
+                                    />
+                                </UPopover>
+                                <UPopover
+                                    mode="hover"
+                                    :popper="{ placement: 'top' }"
+                                >
+                                    <template #panel>
+                                        <div
+                                            class="px-3 py-2 text-xs bg-neutral-700"
+                                        >
+                                            ベースアバターに対して公式に対応が行われていないアイテムがリストされています。<br />
+                                            UnityやDCCツール（Blenderなど）で独自の対応が行われている場合があります。
+                                        </div>
+                                    </template>
+                                    <Tag
+                                        color="secondary"
+                                        text="アバター非対応アイテム"
+                                        icon="lucide:hammer"
+                                    />
+                                </UPopover>
+                                <UPopover
+                                    mode="hover"
+                                    :popper="{ placement: 'top' }"
+                                >
+                                    <template #panel>
+                                        <div
+                                            class="px-3 py-2 text-xs bg-neutral-700"
+                                        >
+                                            一部のアイテムが情報の取得に失敗しています。<br />
+                                            これらのアイテムは非公開になっているか、<br />
+                                            既に販売が終了している可能性があります。
+                                        </div>
+                                    </template>
+                                    <Tag
+                                        color="secondary"
+                                        text="リンク切れアイテム"
+                                        icon="lucide:unlink"
+                                    />
+                                </UPopover>
                             </div>
                         </div>
                     </div>

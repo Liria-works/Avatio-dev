@@ -15,21 +15,21 @@ import { tv } from "tailwind-variants";
 
 const tag = tv({
     slots: {
-        base: "px-2.5 py-1 rounded justify-center items-center flex text-sm whitespace-nowrap gap-1",
+        base: "px-2.5 py-1 rounded rounded-lg justify-center items-center flex text-sm whitespace-nowrap gap-1",
         icon: "size-4 min-w-max min-h-max text-neutral-500",
     },
     variants: {
         color: {
             primary: {
-                base: "bg-white hover:bg-neutral-200 text-black",
-                icon: "text-neutral-500",
+                base: "bg-white dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-black dark:text-white",
+                icon: "text-neutral-500 dark:text-neutral-300",
             },
             secondary: {
-                base: "text-white bg-neutral-600 hover:bg-neutral-700",
-                icon: "text-white",
+                base: "text-white dark:text-black bg-neutral-600 hover:bg-neutral-700 dark:bg-neutral-300 dark:hover:bg-neutral-200",
+                icon: "text-white dark:text-neutral-700",
             },
             pink: {
-                base: "text-white bg-pink-400 hover:bg-pink-500",
+                base: "text-white bg-pink-500 hover:bg-pink-400",
                 icon: "text-white",
             },
         },

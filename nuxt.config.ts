@@ -10,7 +10,8 @@ export default defineNuxtConfig({
         "@nuxt/scripts",
         "@formkit/auto-animate",
         "@nuxt/content",
+        "@nuxtjs/color-mode",
     ],
     compatibilityDate: "2024-07-25",
-    css: ["~/public/index.css"],
+    //css: ["~/public/index.css"],
 });

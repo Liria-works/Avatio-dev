@@ -1,13 +1,28 @@
 <script setup lang="ts">
-defineProps({
-    title: String,
-    icon: String,
-});
+const props = withDefaults(
+    defineProps<{
+        title: string;
+        icon?: string;
+        trailing?: string;
+        trailingIcon?: string;
+    }>(),
+    {
+        icon: "lucide:circle",
+        trailing: "",
+        trailingIcon: "lucide:arrow-right",
+    }
+);
 </script>
 
 <template>
-    <div class="items-center gap-1.5 inline-flex">
-        <Icon :name="icon" :width="18" :height="18" class="text-neutral-600" />
-        <div class="text-black text-md">{{ title }}</div>
+    <div class="flex items-center justify-between w-full">
+        <div class="items-center gap-1.5 inline-flex">
+            <Icon :name="props.icon" :width="20" :height="20" class="text-neutral-500 dark:text-neutral-400" />
+            <div class="text-black dark:text-white text-md">{{ props.title }}</div>
+        </div>
+        <button v-if="props.trailing" class="items-center gap-1 inline-flex">
+            <div class="text-black dark:text-neutral-400 text-sm">{{ props.trailing }}</div>
+            <Icon :name="props.trailingIcon" :width="18" :height="18" class="text-neutral-600 dark:text-neutral-400" />
+        </button>
     </div>
 </template>

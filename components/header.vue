@@ -8,109 +8,59 @@ const isDark = computed({
         colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
     },
 });
+import Button_Custom from "~/components/button.vue";
 </script>
 
 <template>
     <div class="flex flex-row items-center justify-between w-full">
-        <button class="justify-start items-end gap-2 flex font-['Montserrat']">
-            <div class="flex gap-1.5">
-                <div class="text-black text-5xl font-extrabold">Avat</div>
-                <div class="text-black text-5xl font-extrabold">io</div>
+        <button class="justify-start items-end gap-2 flex font-['Montserrat'] text-black dark:text-white">
+            <div class="flex gap-1.5 text-5xl font-extrabold">
+                <div>Avat</div>
+                <div>io</div>
             </div>
-            <div class="text-black text-sm font-semibold pb-1">by Liria</div>
+            <div class="text-sm font-semibold pb-1">by Liria</div>
         </button>
         <div class="items-center flex flex-row gap-12">
-            <div class="items-center gap-4 flex">
-                <button
-                    class="flex items-center justify-center rounded-full hover:bg-neutral-200 p-2"
-                >
-                    <Icon
-                        name="simple-icons:github"
-                        :width="24"
-                        :height="24"
-                        class="text-black"
-                    />
-                </button>
-                <button
-                    class="flex items-center justify-center rounded-full hover:bg-neutral-200 p-2"
-                >
-                    <Icon
-                        name="simple-icons:discord"
-                        :width="24"
-                        :height="24"
-                        class="text-black"
-                    />
-                </button>
-                <button
-                    class="flex items-center justify-center rounded-full hover:bg-neutral-200 p-2"
-                >
-                    <Icon
-                        name="simple-icons:x"
-                        :width="20"
-                        :height="20"
-                        class="text-black"
-                    />
-                </button>
+            <div class="items-center gap-4 flex text-black dark:text-white hidden">
+                <Button_Custom icon="simple-icons:github" :iconSize="22" />
+                <Button_Custom icon="simple-icons:discord" />
+                <Button_Custom icon="simple-icons:x" :iconSize="20" />
             </div>
             <div class="items-center gap-4 flex">
-                <UPopover
-                    :ui="{
+
+                <div class="items-center gap-2 flex">
+                    <ClientOnly>
+                        <Button_Custom :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+                            @click="isDark = !isDark" />
+                        <template #fallback>
+                            <div class="w-0 h-8" />
+                        </template>
+                    </ClientOnly>
+
+                    <UPopover :ui="{
                         background: 'bg-white dark:bg-white',
                         ring: 'ring-0',
                         rounded: 'rounded-lg',
-                    }"
-                >
-                    <button
-                        class="flex items-center justify-center rounded-full hover:bg-neutral-200 p-2"
-                    >
-                        <Icon
-                            name="lucide:languages"
-                            :width="24"
-                            :height="24"
-                            class="text-black"
-                        />
-                    </button>
+                    }">
+                        <Button_Custom icon="lucide:languages" />
+
+                        <template #panel="{ close }">
+                            <div class="p-8">
+                                <UButton label="Close" @click="close" />
+                            </div>
+                        </template>
+                    </UPopover>
+                </div>
+
+                <UPopover :ui="{
+                    background: 'bg-white dark:bg-white',
+                    ring: 'ring-0',
+                    rounded: 'rounded-lg',
+                }">
+                    <UAvatar src="https://avatars.githubusercontent.com/u/47878070?v=4" alt="Avatar" />
 
                     <template #panel="{ close }">
-                        <div class="p-8">
-                            <UButton label="Close" @click="close" />
-                        </div>
-                    </template>
-                </UPopover>
-
-                <ClientOnly>
-                    <UButton
-                        :icon="
-                            isDark
-                                ? 'i-heroicons-moon-20-solid'
-                                : 'i-heroicons-sun-20-solid'
-                        "
-                        color="gray"
-                        variant="ghost"
-                        aria-label="Theme"
-                        @click="isDark = !isDark"
-                    />
-                    <template #fallback>
-                        <div class="w-8 h-8" />
-                    </template>
-                </ClientOnly>
-
-                <UPopover
-                    :ui="{
-                        background: 'bg-white dark:bg-white',
-                        ring: 'ring-0',
-                        rounded: 'rounded-lg',
-                    }"
-                >
-                    <UAvatar
-                        src="https://avatars.githubusercontent.com/u/47878070?v=4"
-                        alt="Avatar"
-                    />
-
-                    <template #panel="{ close }">
-                        <div
-                            class="flex flex-col gap-1 items-center p-8 text-black"
-                        >
+                        <div class="flex flex-col gap-1 items-center p-8 text-black">
                             <NuxtLink to="/">Root</NuxtLink>
                             <NuxtLink to="/setup">Setup</NuxtLink>
                             <NuxtLink to="/lkshjdlkasjdk">404</NuxtLink>
