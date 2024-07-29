@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Title from "~/components/title.vue";
 import Tag from "~/components/tag.vue";
-import Banner_avatio from "~/components/banner.vue";
 import Button_Custom from "~/components/button.vue";
 </script>
 
@@ -26,7 +25,7 @@ import Button_Custom from "~/components/button.vue";
                             label="新規セットアップ"
                             :trailing="false"
                             :ui="{ rounded: 'rounded-xl' }"
-                            class="w-full"
+                            block
                         />
                         <div
                             class="self-stretch flex-col justify-start items-start gap-3 flex"

@@ -41,7 +41,11 @@ const { base, icon } = tag();
 
 <template>
     <button :class="base({ color: props.color })">
-        <Icon :name="props.icon" :class="icon({ color: props.color })" />
+        <Icon
+            v-if="props.icon"
+            :name="props.icon"
+            :class="icon({ color: props.color })"
+        />
         {{ text }}
     </button>
 </template>

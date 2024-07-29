@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Button_Custom from "~/components/button.vue";
+import Tag from "~/components/tag.vue";
+
 import { tv } from "tailwind-variants";
 
 const props = withDefaults(
@@ -9,11 +12,14 @@ const props = withDefaults(
         image: string;
         price?: number;
         size: any;
+        link?: string;
+        nsfw?: boolean;
     }>(),
     {
         editing: false,
         size: "md",
         price: 0,
+        nsfw: false,
     }
 );
 
@@ -50,44 +56,60 @@ const { frame, image, text } = item();
     <div :class="frame({ size: props.size })">
         <img :class="image({ size: props.size })" :src="props.image" />
         <div :class="text({ size: props.size })">
-            <a class="text-black dark:text-white text-md font-medium truncate" href="">
+            <a
+                class="text-black dark:text-white text-md font-medium truncate"
+                :href="props.link"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
                 {{ props.text }}
             </a>
-            <a class="text-neutral-700 dark:text-neutral-300 text-sm font-medium truncate" href="">
+
+            <a
+                class="text-neutral-700 dark:text-neutral-300 text-sm font-medium truncate"
+                href=""
+            >
                 {{ props.shop }}
             </a>
         </div>
 
+        <div class="flex items-center gap-1 px-2">
+            <Tag
+                v-if="props.nsfw"
+                color="pink"
+                icon=""
+                text="NSFW"
+                class="text-xs"
+            />
+        </div>
         <div v-if="props.editing" class="flex gap-2 items-center">
-            <div class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap">
-                {{ formatPrice(props.price) }}
-            </div>
-            <UPopover :popper="{ placement: 'right' }" :ui="{
-                background: 'bg-white dark:bg-white',
-                ring: 'ring-0',
-                rounded: 'rounded-lg',
-            }">
-                <template #panel>
-                    <div class="px-3 py-2 flex flex-col gap-2">
-                        <UButton>編集</UButton>
-                        <UButton>削除</UButton>
-                    </div>
-                </template>
-                <button
-                    class="flex items-center justify-center size-10 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-600">
-                    <Icon name="lucide:ellipsis-vertical" :width="18" :height="18"
-                        class="text-neutral-600 dark:text-neutral-300 min-w-max min-h-max" />
-                </button>
-            </UPopover>
+            <Button_Custom
+                icon="lucide:pen-line"
+                :iconSize="16"
+                class="hover:dark:bg-neutral-600"
+            />
+            <Button_Custom
+                icon="lucide:trash"
+                :iconSize="16"
+                class="hover:dark:bg-neutral-600"
+            />
         </div>
 
-        <button v-if="!props.editing"
-            class="flex gap-3 items-center hover:bg-neutral-100 dark:hover:bg-neutral-600 py-2 px-4 rounded-lg">
-            <div class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap">
+        <button
+            v-if="!props.editing"
+            class="flex gap-3 items-center hover:bg-neutral-100 dark:hover:bg-neutral-600 py-2 px-4 rounded-lg"
+        >
+            <div
+                class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap"
+            >
                 {{ formatPrice(props.price) }}
             </div>
-            <Icon name="lucide:external-link" :width="18" :height="18"
-                class="text-neutral-600 dark:text-neutral-300 min-w-max min-h-max" />
+            <Icon
+                name="lucide:external-link"
+                :width="18"
+                :height="18"
+                class="text-neutral-600 dark:text-neutral-300 min-w-max min-h-max"
+            />
         </button>
     </div>
 </template>

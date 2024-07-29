@@ -3,7 +3,6 @@ import Title from "~/components/title.vue";
 import Item from "~/components/item.vue";
 import Tag from "~/components/tag.vue";
 import Button_Custom from "~/components/button.vue";
-import Banner_avatio from "~/components/banner.vue";
 
 const modal_share = ref(false);
 const modal_report = ref(false);
@@ -141,7 +140,6 @@ const modal_report = ref(false);
                             image="https://booth.pximg.net/e715aab8-6dd1-46e0-b0f9-f481cdaab0da/i/5929004/bd1da940-09ad-4bd8-89cb-3de5e040203c_base_resized.jpg"
                             :price="1500"
                             size="md"
-                            :editing="true"
                         />
                         <Item
                             text="【複数アバター対応】怪獣着ぐるみ たつぐるみ"
@@ -155,6 +153,7 @@ const modal_report = ref(false);
                         <Title title="アクセサリー" icon="lucide:star" />
                         <Item
                             text="チャームチョーカー // アバターアクセサリー"
+                            link="https://booth.pm/ja/items/4758318"
                             shop="Liria Graphics"
                             image="https://booth.pximg.net/71691351-b285-40e7-af97-09cd9976f902/i/4758318/ad7ce9a5-5375-471a-bcfd-0b8b5bdda437_base_resized.jpg"
                             :price="500"
@@ -218,7 +217,7 @@ const modal_report = ref(false);
                             </div>
                         </div>
                         <div
-                            class="self-stretch h-[65px] flex-col justify-start items-start gap-2.5 flex"
+                            class="self-stretch flex-col justify-start items-start gap-2.5 flex"
                         >
                             <Title title="コンテンツ" icon="lucide:package" />
                             <div
