@@ -11,7 +11,22 @@ export default defineNuxtConfig({
         "@formkit/auto-animate",
         "@nuxt/content",
         "@nuxtjs/color-mode",
+        "@nuxtjs/supabase",
     ],
     compatibilityDate: "2024-07-25",
-    //css: ["~/public/index.css"],
+    components: [
+        {
+            path: "~/components",
+        },
+    ],
+    supabase: {
+        redirect: false,
+        redirectOptions: {
+            login: "/login",
+            callback: "/confirm",
+            include: undefined,
+            exclude: [],
+            cookieRedirect: false,
+        },
+    },
 });

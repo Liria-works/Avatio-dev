@@ -1,27 +1,38 @@
 <script setup lang="ts">
-import Button_Custom from "~/components/button.vue";
-import Tag from "~/components/tag.vue";
-
 import { tv } from "tailwind-variants";
 
 const props = withDefaults(
     defineProps<{
+        id: number;
         editing?: boolean;
-        text: string;
-        shop: string;
-        image: string;
-        price?: number;
         size: any;
-        link?: string;
         nsfw?: boolean;
     }>(),
     {
+        id: 0,
         editing: false,
         size: "md",
-        price: 0,
         nsfw: false,
     }
 );
+
+const itemData = ref({});
+
+onMounted(async () => {
+    if (props.id !== null && props.id !== undefined) {
+        try {
+            const response = await $fetch(
+                `/api/test?id=${encodeURIComponent(props.id)}`
+            );
+            itemData.value = response.body;
+            console.log(itemData.value);
+        } catch (error) {
+            console.error("Failed to fetch item data:", error);
+        }
+    } else {
+        console.error("Invalid props.id:", props.id);
+    }
+});
 
 const formatPrice = (price: number | undefined) => {
     if (price === undefined) {
@@ -54,22 +65,22 @@ const { frame, image, text } = item();
 
 <template>
     <div :class="frame({ size: props.size })">
-        <img :class="image({ size: props.size })" :src="props.image" />
+        <img :class="image({ size: props.size })" :src="itemData.thumbnail" />
         <div :class="text({ size: props.size })">
             <a
                 class="text-black dark:text-white text-md font-medium truncate"
-                :href="props.link"
+                :href="'https://booth.pm/ja/items/' + itemData.id"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                {{ props.text }}
+                {{ itemData.item }}
             </a>
 
             <a
                 class="text-neutral-700 dark:text-neutral-300 text-sm font-medium truncate"
                 href=""
             >
-                {{ props.shop }}
+                {{ itemData.shop }}
             </a>
         </div>
 
@@ -83,12 +94,12 @@ const { frame, image, text } = item();
             />
         </div>
         <div v-if="props.editing" class="flex gap-2 items-center">
-            <Button_Custom
+            <AButton
                 icon="lucide:pen-line"
                 :iconSize="16"
                 class="hover:dark:bg-neutral-600"
             />
-            <Button_Custom
+            <AButton
                 icon="lucide:trash"
                 :iconSize="16"
                 class="hover:dark:bg-neutral-600"
@@ -102,7 +113,7 @@ const { frame, image, text } = item();
             <div
                 class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap"
             >
-                {{ formatPrice(props.price) }}
+                {{ formatPrice(itemData.price) }}
             </div>
             <Icon
                 name="lucide:external-link"

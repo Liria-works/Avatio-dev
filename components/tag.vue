@@ -4,10 +4,12 @@ const props = withDefaults(
         text: string;
         icon?: string;
         color?: any;
+        tooltip?: string;
     }>(),
     {
         icon: "lucide:tag",
         color: "primary",
+        tooltip: "",
     }
 );
 
@@ -40,12 +42,13 @@ const { base, icon } = tag();
 </script>
 
 <template>
-    <button :class="base({ color: props.color })">
-        <Icon
-            v-if="props.icon"
-            :name="props.icon"
-            :class="icon({ color: props.color })"
-        />
-        {{ text }}
-    </button>
+    <UTooltip :prevent="props.tooltip ? false : true" :text="props.tooltip" :popper="{ placement: 'top' }" :ui="{
+        background: 'bg-white dark:bg-gray-700',
+        ring: 'ring-0',
+    }">
+        <button :class="base({ color: props.color })">
+            <Icon v-if="props.icon" :name="props.icon" :class="icon({ color: props.color })" />
+            {{ text }}
+        </button>
+    </UTooltip>
 </template>
