@@ -58,6 +58,7 @@ const isDark = computed({
                         <div class="flex flex-col gap-1 items-center p-8 text-black">
                             <NuxtLink to="/">Root</NuxtLink>
                             <NuxtLink to="/setup">Setup</NuxtLink>
+                            <NuxtLink to="/edit">Edit</NuxtLink>
                             <NuxtLink to="/lkshjdlkasjdk">404</NuxtLink>
                             <UButton label="Close" @click="close" />
                         </div>

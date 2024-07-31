@@ -13,12 +13,13 @@
             </div>
             <div class="flex gap-2 items-center">
                 <NuxtLink to="/">
-                    <AButton icon="lucide:upload" text="公開" :iconSize="18"
-                        class="dark:bg-neutral-200 hover:dark:bg-neutral-400 dark:text-neutral-800" />
+                    <UButton size="lg" label="公開" icon="i-heroicons-arrow-up-tray-16-solid" />
                 </NuxtLink>
                 <NuxtLink to="/">
-                    <AButton icon="lucide:trash" :iconSize="18"
-                        class="dark:bg-neutral-700 hover:dark:bg-neutral-600 h-10 w-10" />
+                    <AButton icon="lucide:upload" text="公開" :iconSize="18" class="" />
+                </NuxtLink>
+                <NuxtLink to="/">
+                    <AButton icon="lucide:trash" :iconSize="18" />
                 </NuxtLink>
             </div>
         </div>

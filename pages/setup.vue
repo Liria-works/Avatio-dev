@@ -10,15 +10,15 @@ const setup = {
     items: [
         {
             category: "avatar",
-            items: [5840911],
+            items: Array.from(new Set([5840911])),
         },
         {
             category: "cloth",
-            items: [5929004],
+            items: Array.from(new Set([5929004])),
         },
         {
             category: "accessory",
-            items: [4758318, 4758318],
+            items: Array.from(new Set([4758318, 4758318])),
         },
     ],
 };
@@ -118,11 +118,10 @@ const setup = {
                         title="アクセサリー"
                         icon="lucide:star"
                     />
+
                     <AItem
                         v-for="item in i.items"
-                        :key="item"
-                        :id="item"
-                        :link="'https://booth.pm/ja/items/' + item.id"
+                        :content="item"
                         :size="i.category === 'avatar' ? 'lg' : 'md'"
                     />
                 </div>
@@ -147,26 +146,7 @@ const setup = {
                     class="self-stretch flex-col justify-start items-start gap-2 flex"
                 >
                     <ATitle title="作者" icon="lucide:user-round" />
-                    <div
-                        class="flex flex-row items-center justify-between pt-1 w-full"
-                    >
-                        <div class="flex flex-row gap-3 items-center">
-                            <UAvatar
-                                src="https://avatars.githubusercontent.com/u/47878070?v=4"
-                                alt="Avatar"
-                            />
-                            <span
-                                class="text-black dark:text-white pb-0.5 text-left"
-                            >
-                                {{ setup.author }}
-                            </span>
-                        </div>
-                        <AButton
-                            icon="lucide:link"
-                            :iconSize="18"
-                            tooltip="リンク"
-                        />
-                    </div>
+                    <AUser :user="setup.author" />
                 </div>
                 <div
                     class="self-stretch flex-col justify-start items-start gap-2.5 flex w-full"

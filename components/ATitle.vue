@@ -18,7 +18,7 @@ const props = withDefaults(
     <div class="flex items-center justify-between w-full">
         <div class="items-center gap-1.5 inline-flex">
             <Icon :name="props.icon" :width="20" :height="20" class="text-neutral-500 dark:text-neutral-400" />
-            <div class="text-black dark:text-white text-md">{{ props.title }}</div>
+            <div class="text-black dark:text-white text-[15px] font-medium">{{ props.title }}</div>
         </div>
         <button v-if="props.trailing" class="items-center gap-1 inline-flex">
             <div class="text-black dark:text-neutral-400 text-sm">{{ props.trailing }}</div>

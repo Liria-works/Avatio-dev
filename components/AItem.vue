@@ -3,13 +3,12 @@ import { tv } from "tailwind-variants";
 
 const props = withDefaults(
     defineProps<{
-        id: number;
+        content?: number | string;
         editing?: boolean;
         size: any;
         nsfw?: boolean;
     }>(),
     {
-        id: 0,
         editing: false,
         size: "md",
         nsfw: false,
@@ -19,26 +18,34 @@ const props = withDefaults(
 const itemData = ref({});
 
 onMounted(async () => {
-    if (props.id !== null && props.id !== undefined) {
+    if (props.content !== null && props.content !== undefined) {
         try {
-            const response = await $fetch(
-                `/api/test?id=${encodeURIComponent(props.id)}`
-            );
-            itemData.value = response.body;
-            console.log(itemData.value);
+            if (typeof props.content === "string") {
+                const response = await $fetch(
+                    `/api/GetBoothItem?url=${encodeURIComponent(props.content)}`
+                );
+                itemData.value = response.body;
+            } else {
+                const response = await $fetch(
+                    `/api/GetBoothItem?id=${encodeURIComponent(props.content)}`
+                );
+                itemData.value = response.body;
+            }
+            //console.log(itemData.value);
         } catch (error) {
             console.error("Failed to fetch item data:", error);
         }
     } else {
-        console.error("Invalid props.id:", props.id);
+        console.error("Invalid props.content:", props.content);
     }
 });
 
-const formatPrice = (price: number | undefined) => {
+const formatPrice = (price: string | undefined) => {
     if (price === undefined) {
         return "";
     }
-    return `¥ ${price.toLocaleString("ja-JP")}`;
+    const price_int = parseInt(price, 10);
+    return `¥ ${price_int.toLocaleString("ja-JP")}`;
 };
 
 const item = tv({
@@ -65,11 +72,15 @@ const { frame, image, text } = item();
 
 <template>
     <div :class="frame({ size: props.size })">
-        <img :class="image({ size: props.size })" :src="itemData.thumbnail" />
-        <div :class="text({ size: props.size })">
+        <img
+            v-show="itemData.thumbnail"
+            :class="image({ size: props.size })"
+            :src="itemData.thumbnail"
+        />
+        <div v-show="itemData.thumbnail" :class="text({ size: props.size })">
             <a
                 class="text-black dark:text-white text-md font-medium truncate"
-                :href="'https://booth.pm/ja/items/' + itemData.id"
+                :href="itemData.link"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -94,19 +105,12 @@ const { frame, image, text } = item();
             />
         </div>
         <div v-if="props.editing" class="flex gap-2 items-center">
-            <AButton
-                icon="lucide:pen-line"
-                :iconSize="16"
-                class="hover:dark:bg-neutral-600"
-            />
-            <AButton
-                icon="lucide:trash"
-                :iconSize="16"
-                class="hover:dark:bg-neutral-600"
-            />
+            <AButton icon="lucide:pen-line" :iconSize="16" />
+            <AButton icon="lucide:trash" :iconSize="16" />
         </div>
 
         <button
+            v-show="itemData.thumbnail"
             v-if="!props.editing"
             class="flex gap-3 items-center hover:bg-neutral-100 dark:hover:bg-neutral-600 py-2 px-4 rounded-lg"
         >
