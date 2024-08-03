@@ -12,7 +12,9 @@ const isDark = computed({
 
 <template>
     <div class="flex flex-row items-center justify-between w-full">
-        <button class="justify-start items-end gap-2 flex font-['Montserrat'] text-black dark:text-white">
+        <button
+            class="justify-start items-end gap-2 flex font-['Montserrat'] text-black dark:text-white"
+        >
             <div class="flex gap-1.5 text-5xl font-extrabold">
                 <div>Avat</div>
                 <div>io</div>
@@ -23,20 +25,26 @@ const isDark = computed({
             <div class="items-center gap-4 flex">
                 <div class="items-center gap-2 flex">
                     <ClientOnly>
-                        <AButton :icon="isDark
-                            ? 'i-heroicons-moon-20-solid'
-                            : 'i-heroicons-sun-20-solid'
-                            " @click="isDark = !isDark" />
+                        <AButton
+                            :icon="
+                                isDark
+                                    ? 'i-heroicons-moon-20-solid'
+                                    : 'i-heroicons-sun-20-solid'
+                            "
+                            @click="isDark = !isDark"
+                        />
                         <template #fallback>
                             <div class="w-0 h-8" />
                         </template>
                     </ClientOnly>
 
-                    <UPopover :ui="{
-                        background: 'bg-white dark:bg-white',
-                        ring: 'ring-0',
-                        rounded: 'rounded-lg',
-                    }">
+                    <UPopover
+                        :ui="{
+                            background: 'bg-white dark:bg-white',
+                            ring: 'ring-0',
+                            rounded: 'rounded-lg',
+                        }"
+                    >
                         <AButton icon="lucide:languages" />
 
                         <template #panel="{ close }">
@@ -47,15 +55,22 @@ const isDark = computed({
                     </UPopover>
                 </div>
 
-                <UPopover :ui="{
-                    background: 'bg-white dark:bg-white',
-                    ring: 'ring-0',
-                    rounded: 'rounded-lg',
-                }">
-                    <UAvatar src="https://avatars.githubusercontent.com/u/47878070?v=4" alt="Avatar" />
+                <UPopover
+                    :ui="{
+                        background: 'bg-white dark:bg-white',
+                        ring: 'ring-0',
+                        rounded: 'rounded-lg',
+                    }"
+                >
+                    <UAvatar
+                        src="https://avatars.githubusercontent.com/u/47878070?v=4"
+                        alt="Avatar"
+                    />
 
                     <template #panel="{ close }">
-                        <div class="flex flex-col gap-1 items-center p-8 text-black">
+                        <div
+                            class="flex flex-col gap-1 items-center p-8 text-black"
+                        >
                             <NuxtLink to="/">Root</NuxtLink>
                             <NuxtLink to="/setup">Setup</NuxtLink>
                             <NuxtLink to="/edit">Edit</NuxtLink>

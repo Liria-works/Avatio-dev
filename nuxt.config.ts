@@ -3,7 +3,6 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: [
         "@nuxt/ui",
-        "radix-vue",
         "@vueuse/nuxt",
         "@nuxt/image",
         "@nuxt/fonts",
@@ -32,4 +31,5 @@ export default defineNuxtConfig({
     routeRules: {
         "/": { prerender: true },
     },
+    css: ["~/public/markdown.css"],
 });

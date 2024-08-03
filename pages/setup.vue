@@ -1,41 +1,91 @@
 <script setup lang="ts">
-const modal_report = ref(false);
+const route = useRoute();
 
-const setup = {
-    name: "普段使い改変",
-    description:
-        "普段使っているアバターです。かわいいものをたくさん使いました。",
-    author: "Liry24",
-    tag: ["かわいい", "ガーリー", "普段使い", "ショートヘア"],
-    items: [
-        {
-            category: "avatar",
-            items: Array.from(new Set([5840911])),
-        },
-        {
-            category: "cloth",
-            items: Array.from(new Set([5929004])),
-        },
-        {
-            category: "accessory",
-            items: Array.from(new Set([4758318, 4758318])),
-        },
-    ],
-};
+const modal_report = ref(false);
+const setup = ref<any>(null);
+const loading = ref(true);
+const items_avatar: any = ref([]);
+const items_cloth: any = ref([]);
+const items_accessory: any = ref([]);
+const items_other: any = ref([]);
+const items_outdated: any = ref([]);
+const totalItems = ref(0);
+
+async function fetchBoothItem(id: number | string) {
+    const response = await $fetch(
+        `/api/GetBoothItem?id=${encodeURIComponent(id)}`
+    );
+    if (response.status === 200) {
+        return response.body;
+    } else {
+        console.error("Failed to fetch item data:", response);
+        return null;
+    }
+}
+
+onMounted(async () => {
+    const id: any = route.query.id;
+    const setupData: any = await $fetch(
+        `/api/GetDataSetup?id=${encodeURIComponent(id)}`
+    );
+    if (!setupData) {
+        return;
+    }
+
+    setup.value = setupData.body;
+
+    const id_avatar: number = setup.value.avatar;
+    const avatarItem = await fetchBoothItem(id_avatar);
+    if (avatarItem) {
+        items_avatar.value.push(avatarItem);
+    } else {
+        console.error("Invalid content:", id_avatar);
+        items_avatar.value.push(null);
+    }
+
+    const categoryMap: any = {
+        209: items_cloth,
+        217: items_accessory,
+    };
+
+    for await (const i of setup.value.items as AsyncIterable<any>) {
+        if (i !== null && i !== undefined) {
+            const item: any = await fetchBoothItem(i);
+            if (item) {
+                const targetArray =
+                    categoryMap[item.category_id] || items_other;
+                targetArray.value.push(item);
+            } else {
+                console.error("Invalid content:", i);
+                items_outdated.value.push(null);
+            }
+        }
+    }
+
+    totalItems.value =
+        items_avatar.value.length +
+        items_cloth.value.length +
+        items_accessory.value.length +
+        items_other.value.length;
+    loading.value = false;
+});
 </script>
 
 <template>
     <div class="flex-col justify-start items-start gap-5 flex w-full px-3">
-        <div class="flex flex-row items-center justify-between w-full">
+        <div
+            v-show="!loading"
+            class="flex flex-row items-center justify-between w-full"
+        >
             <div class="items-center gap-7 flex flex-row">
                 <div class="text-black dark:text-white text-2xl font-bold">
-                    {{ setup.name }}
+                    {{ setup?.name || "" }}
                 </div>
 
                 <div
                     class="text-neutral-600 dark:text-neutral-400 text-sm pt-0.5"
                 >
-                    0 アイテム
+                    {{ totalItems }} アイテム
                 </div>
 
                 <div class="flex flex-row gap-2">
@@ -98,36 +148,128 @@ const setup = {
             </NuxtLink>
         </div>
         <div class="items-start gap-8 flex w-full">
-            <div class="flex flex-col items-center gap-8 w-full">
-                <div
-                    v-for="i in setup.items"
-                    class="flex-col items-start gap-3 flex w-full"
-                >
-                    <ATitle
-                        v-if="i.category === 'avatar'"
-                        title="ベースアバター"
-                        icon="lucide:person-standing"
-                    />
-                    <ATitle
-                        v-else-if="i.category === 'cloth'"
-                        title="衣装"
-                        icon="lucide:shirt"
-                    />
-                    <ATitle
-                        v-else-if="i.category === 'accessory'"
-                        title="アクセサリー"
-                        icon="lucide:star"
-                    />
-
-                    <AItem
-                        v-for="item in i.items"
-                        :content="item"
-                        :size="i.category === 'avatar' ? 'lg' : 'md'"
-                    />
-                </div>
+            <div
+                v-show="loading"
+                class="flex flex-col items-center gap-6 w-full"
+            >
+                <USkeleton
+                    class="h-10 w-full"
+                    :ui="{
+                        background: 'bg-gray-100 dark:bg-gray-700',
+                        rounded: 'rounded-xl',
+                    }"
+                />
+                <USkeleton
+                    v-for="i in 4"
+                    class="h-32 w-full"
+                    :ui="{
+                        background: 'bg-gray-100 dark:bg-gray-700',
+                        rounded: 'rounded-xl',
+                    }"
+                />
             </div>
 
             <div
+                v-show="!loading"
+                class="flex flex-col items-center gap-8 w-full"
+            >
+                <SetupsCategory
+                    v-if="items_avatar"
+                    title="ベースアバター"
+                    icon="lucide:person-standing"
+                >
+                    <SetupsItem
+                        v-for="i in items_avatar"
+                        :key="'item-' + i?.id"
+                        :primary="i.item"
+                        :secondary="i.shop"
+                        :shop_id="i.shop_id"
+                        :thumbnail="i.thumbnail"
+                        :price="i.price"
+                        :link="i.link"
+                        size="lg"
+                    />
+                </SetupsCategory>
+
+                <SetupsCategory
+                    v-if="items_cloth.length"
+                    title="衣服"
+                    icon="lucide:shirt"
+                >
+                    <SetupsItem
+                        v-for="i in items_cloth"
+                        :primary="i.item"
+                        :secondary="i.shop"
+                        :shop_id="i.shop_id"
+                        :thumbnail="i.thumbnail"
+                        :price="i.price"
+                        :link="i.link"
+                        size="md"
+                    />
+                </SetupsCategory>
+
+                <SetupsCategory
+                    v-if="items_accessory.length"
+                    title="アクセサリー"
+                    icon="lucide:star"
+                >
+                    <SetupsItem
+                        v-for="i in items_accessory"
+                        :primary="i.item"
+                        :secondary="i.shop"
+                        :shop_id="i.shop_id"
+                        :thumbnail="i.thumbnail"
+                        :price="i.price"
+                        :link="i.link"
+                        size="md"
+                    />
+                </SetupsCategory>
+
+                <SetupsCategory
+                    v-if="items_other.length"
+                    title="その他"
+                    icon="lucide:shirt"
+                >
+                    <SetupsItem
+                        v-for="i in items_other"
+                        :primary="i.item"
+                        :secondary="i.shop"
+                        :shop_id="i.shop_id"
+                        :thumbnail="i.thumbnail"
+                        :price="i.price"
+                        :link="i.link"
+                        size="md"
+                    />
+                </SetupsCategory>
+
+                <SetupsCategory
+                    v-if="items_outdated.length"
+                    title="不明なアイテム"
+                    icon="lucide:file-question"
+                >
+                    <SetupsItem
+                        v-for="i in items_other"
+                        :outdated="true"
+                        primary="取得に失敗しました"
+                        thumbnail="placeholder"
+                        size="md"
+                    />
+                </SetupsCategory>
+            </div>
+
+            <div v-show="loading" class="w-96 flex flex-col items-center gap-6">
+                <USkeleton
+                    v-for="i in 4"
+                    class="h-24 w-full"
+                    :ui="{
+                        background: 'bg-gray-100 dark:bg-gray-700',
+                        rounded: 'rounded-xl',
+                    }"
+                />
+            </div>
+
+            <div
+                v-show="!loading"
                 class="w-96 flex-col justify-start items-start gap-8 inline-flex"
             >
                 <div
@@ -137,16 +279,16 @@ const setup = {
                     <div
                         class="self-stretch px-3 py-2 bg-white dark:bg-neutral-700 rounded-xl items-center flex"
                     >
-                        <span class="text-black dark:text-white text-sm">{{
-                            setup.description
-                        }}</span>
+                        <span class="text-black dark:text-white text-sm">
+                            {{ setup?.desc || "" }}
+                        </span>
                     </div>
                 </div>
                 <div
                     class="self-stretch flex-col justify-start items-start gap-2 flex"
                 >
                     <ATitle title="作者" icon="lucide:user-round" />
-                    <AUser :user="setup.author" />
+                    <AUser :user="setup?.author" size="md" />
                 </div>
                 <div
                     class="self-stretch flex-col justify-start items-start gap-2.5 flex w-full"
@@ -155,7 +297,7 @@ const setup = {
                     <div
                         class="justify-start items-center gap-1.5 flex flex-row flex-wrap"
                     >
-                        <Tag v-for="i in setup.tag" :text="i" />
+                        <Tag v-for="i in setup?.tags || []" :text="i" />
                     </div>
                 </div>
                 <div
@@ -181,7 +323,7 @@ const setup = {
                             color="secondary"
                             text="リンク切れアイテム"
                             icon="lucide:unlink"
-                            tooltip="一部のアイテムが情報の取得に失敗しています。これらのアイテムは非公開になっているか、既に販売が終了している可能性があります。"
+                            tooltip="一部のアイテムが情報の取得に失敗しています。これらのアイテムは非公開になっているか、カテゴリが変更されたか、既に販売が終了している可能性があります。"
                         />
                     </div>
                 </div>

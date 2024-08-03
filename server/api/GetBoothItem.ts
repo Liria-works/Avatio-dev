@@ -1,140 +1,150 @@
+// DBに登録されているデータが古い場合にBoothからデータを取得してDBに保存する工程の追加
+// カテゴリ外でもVRChatタグ等が付いていた場合の例外処理
+// NSFWアイテムに対する処理の追加 -> Puppeteerの利用
+// ログイン済みユーザー以外の処理は弾くようにする
+
 import { serverSupabaseClient } from "#supabase/server";
 import superagent from "superagent";
 import { load } from "cheerio";
 
-//モジュール化
-
-// DBに登録されているデータが古い場合にBoothからデータを取得してDBに保存する工程の追加
-// リンクが切れている場合のレスポンスの追加
-// カテゴリがアバター関連の場合のみ処理を継続するようにする -> カテゴリ外でもVRChatタグ等が付いていた場合の例外処理も追加
-// NSFWアイテムに対する処理の追加 -> Puppeteerの利用
-// ログイン済みユーザー以外の処理は弾くようにする
-
 const url_base = "https://booth.pm/ja/items/";
 
+const allowed_category_id = [
+    // 3Dモデル
+    208, // 3Dキャラクター
+    209, // 3D衣装
+    217, // 3D装飾品
+    210, // 3D小道具
+    214, // 3Dテクスチャ
+    215, // 3Dツール・システム
+    216, // 3Dモーション・アニメーション
+    211, // 3D環境・ワールド
+    212, // VRoid
+    127, // 3Dモデル（その他）
+    // 素材データ
+    125, // イラスト素材
+    213, // イラスト3D素材
+    126, // 背景画像
+    128, // フォント・書体
+    129, // アイコン
+    22, //ロゴ
+    123, //BGM素材
+    124, //効果音
+    134, // 素材（その他）
+];
+
 export default defineEventHandler(async (event) => {
-  const startTime = Date.now(); // 処理開始時刻を記録
+    const startTime = Date.now(); // 処理開始時刻を記録
+    const query = getQuery(event);
+    const id = extractId(query);
 
-  const query = getQuery(event);
+    if (!id) {
+        return {
+            status: 400,
+            body: { error: "No ID or URL provided" },
+        };
+    }
 
-  let id;
+    const client = await serverSupabaseClient(event);
+    const { data }: any = await client
+        .from("items")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-  if (query.id) {
-    id = query.id;
-  } else if (query.url) {
-    const url_parse = new URL(query.url.toString());
+    if (data) {
+        logDuration(startTime, "Database", data.name);
+        return createResponse(200, "Data found in database", data, id);
+    }
 
-    const pathSegments = url_parse.pathname
-      .split("/")
-      .filter((segment) => segment);
+    try {
+        const result = await superagent.get(url_base + id);
+        const $ = load(result.text);
+        const itemData = extractItemData($);
 
-    const itemsIndex = pathSegments.indexOf("items");
-    id =
-      itemsIndex !== -1 && itemsIndex + 1 < pathSegments.length
-        ? pathSegments[itemsIndex + 1]
-        : undefined;
-  } else {
-    return {
-      status: 400,
-      body: { error: "No ID or URL provided" },
-    };
-  }
+        // カテゴリIDをチェック
+        if (!isAllowedCategory(itemData.category)) {
+            return {
+                status: 400,
+                body: { error: "Invalid category ID" },
+            };
+        }
 
-  const client = await serverSupabaseClient(event);
-  const { data } = await client
-    .from("items")
-    .select("*")
-    .eq("id", id as string)
-    .single();
+        await client.from("items").insert(itemData);
+        logDuration(startTime, "Booth", itemData.name);
 
-  if (data) {
-    const endTime = Date.now(); // 処理終了時刻を記録
-    const duration = endTime - startTime; // 処理時間を計算
-    console.log(
-      "Fetch Done : Database : " + duration + "ms" + " : " + data.name,
-    );
-
-    return {
-      status: 200,
-      message: "Data found in database",
-      body: {
-        link: url_base + id,
-        id: data.id,
-        item: data.name,
-        price: data.price,
-        category: "",
-        category_id: data.category,
-        shop: data.shop,
-        shop_id: data.shop_id,
-        thumbnail: data.thumbnail,
-        nsfw: data.nsfw,
-      },
-    };
-  }
-
-  const url = url_base + id;
-
-  try {
-    const result = await superagent.get(url);
-    const $ = load(result.text);
-    const data_market = $(".market");
-
-    let item = data_market.attr("data-product-name")?.toString();
-    let shop = $(".shop__text").find("a").text();
-
-    const item_id = data_market.attr("data-product-id")?.toString();
-    const price = data_market.attr("data-product-price")?.toString();
-    const category_name = data_market
-      .attr("data-shop-tracking-product-category")
-      ?.toString();
-    const category = data_market.attr("data-product-category")?.toString();
-    const shop_id = data_market.attr("data-product-brand")?.toString();
-    const thumbnail = $('meta[property="og:image"]')
-      .attr("content")
-      ?.toString();
-
-    const nsfw: boolean = !data_market.attr("data-product-price")?.toString();
-
-    // データベースにデータを保存
-    const { error } = await client.from("items").insert([
-      {
-        id: item_id,
-        name: item,
-        price: price,
-        category: category,
-        shop: shop,
-        shop_id: shop_id,
-        thumbnail: thumbnail,
-        nsfw: nsfw,
-      },
-    ]);
-    console.log(error);
-
-    const endTime = Date.now(); // 処理終了時刻を記録
-    const duration = endTime - startTime; // 処理時間を計算
-    console.log("Fetch Done : Booth : " + duration + "ms" + " : " + item);
-
-    return {
-      status: 200,
-      message: "Data fetched from Booth URL",
-      body: {
-        link: url,
-        id: item_id,
-        item: item,
-        price: price,
-        category: category_name,
-        category_id: category,
-        shop: shop,
-        shop_id: shop_id,
-        thumbnail: thumbnail,
-        nsfw: nsfw,
-      },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      status: 500,
-      body: { error: "Failed to fetch data" },
-    };
-  }
+        return createResponse(200, "Data fetched from Booth URL", itemData, id);
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 500,
+            body: { error: "Failed to fetch data" },
+        };
+    }
 });
+
+function extractId(query: any): string | undefined {
+    if (query.id) {
+        return query.id;
+    }
+    if (query.url) {
+        const url_parse = new URL(query.url.toString());
+        const pathSegments = url_parse.pathname
+            .split("/")
+            .filter((segment) => segment);
+        const itemsIndex = pathSegments.indexOf("items");
+        return itemsIndex !== -1 && itemsIndex + 1 < pathSegments.length
+            ? pathSegments[itemsIndex + 1]
+            : undefined;
+    }
+    return undefined;
+}
+
+function extractItemData($: any): any {
+    const data_market = $(".market");
+    return {
+        id: data_market.attr("data-product-id")?.toString(),
+        name: data_market.attr("data-product-name")?.toString(),
+        price: Number(data_market.attr("data-product-price")),
+        category: Number(data_market.attr("data-product-category")),
+        //vrchat: $('img[alt="VRChat"]').length,
+        shop: $(".shop__text").find("a").text(),
+        shop_id: data_market.attr("data-product-brand")?.toString(),
+        thumbnail: $('meta[property="og:image"]').attr("content")?.toString(),
+        nsfw: !data_market.attr("data-product-price")?.toString(),
+    };
+}
+
+function isAllowedCategory(categoryId: number): boolean {
+    return allowed_category_id.includes(categoryId);
+}
+
+function logDuration(startTime: number, source: string, itemName: string) {
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    console.log(`Fetch Done : ${source} : ${duration}ms : ${itemName}`);
+}
+
+function createResponse(
+    status: number,
+    message: string,
+    data: any,
+    id: string
+) {
+    return {
+        status,
+        message,
+        body: {
+            link: url_base + id,
+            id: data.id,
+            item: data.name,
+            price: data.price,
+            category: data.category,
+            category_id: data.category,
+            shop: data.shop,
+            shop_id: data.shop_id,
+            thumbnail: data.thumbnail,
+            nsfw: data.nsfw,
+        },
+    };
+}
