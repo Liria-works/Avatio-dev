@@ -2,15 +2,16 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: [
-        "@nuxt/ui",
-        "@vueuse/nuxt",
-        "@nuxt/image",
-        "@nuxt/fonts",
-        "@nuxt/scripts",
-        "@formkit/auto-animate",
-        "@nuxt/content",
-        "@nuxtjs/color-mode",
-        "@nuxtjs/supabase",
+      "@nuxt/ui",
+      "@vueuse/nuxt",
+      "@nuxt/image",
+      "@nuxt/fonts",
+      "@nuxt/scripts",
+      "@formkit/auto-animate",
+      "@nuxt/content",
+      "@nuxtjs/color-mode",
+      "@nuxtjs/supabase",
+      "radix-vue",
     ],
     compatibilityDate: "2024-07-25",
     components: [
@@ -32,4 +33,13 @@ export default defineNuxtConfig({
         "/": { prerender: true },
     },
     css: ["~/public/markdown.css"],
+    icon: {
+        provider: "server",
+        customCollections: [
+            {
+                prefix: "avatio",
+                dir: "./public/icons/avatio",
+            },
+        ],
+    },
 });

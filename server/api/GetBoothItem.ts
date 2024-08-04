@@ -2,6 +2,7 @@
 // カテゴリ外でもVRChatタグ等が付いていた場合の例外処理
 // NSFWアイテムに対する処理の追加 -> Puppeteerの利用
 // ログイン済みユーザー以外の処理は弾くようにする
+// URLが成り立っていないとInternal server errorになるので、エラーハンドリングを追加
 
 import { serverSupabaseClient } from "#supabase/server";
 import superagent from "superagent";
@@ -36,7 +37,7 @@ const allowed_category_id = [
 export default defineEventHandler(async (event) => {
     const startTime = Date.now(); // 処理開始時刻を記録
     const query = getQuery(event);
-    const id = extractId(query);
+    const id = Number(extractId(query));
 
     if (!id) {
         return {
@@ -103,7 +104,7 @@ function extractId(query: any): string | undefined {
 function extractItemData($: any): any {
     const data_market = $(".market");
     return {
-        id: data_market.attr("data-product-id")?.toString(),
+        id: Number(data_market.attr("data-product-id")),
         name: data_market.attr("data-product-name")?.toString(),
         price: Number(data_market.attr("data-product-price")),
         category: Number(data_market.attr("data-product-category")),
@@ -111,7 +112,7 @@ function extractItemData($: any): any {
         shop: $(".shop__text").find("a").text(),
         shop_id: data_market.attr("data-product-brand")?.toString(),
         thumbnail: $('meta[property="og:image"]').attr("content")?.toString(),
-        nsfw: !data_market.attr("data-product-price")?.toString(),
+        nsfw: !data_market.attr("data-product-price"),
     };
 }
 
@@ -129,13 +130,13 @@ function createResponse(
     status: number,
     message: string,
     data: any,
-    id: string
+    id: number
 ) {
     return {
         status,
         message,
         body: {
-            link: url_base + id,
+            link: url_base + id.toString(),
             id: data.id,
             item: data.name,
             price: data.price,

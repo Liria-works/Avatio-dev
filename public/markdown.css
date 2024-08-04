@@ -4,8 +4,11 @@
 }
 
 .markdown h2 {
-    font-size: 1.5em;
+    font-size: 1.3em;
     margin: 0.75em 0;
+    font-weight: 500;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
 }
 
 .markdown h3 {

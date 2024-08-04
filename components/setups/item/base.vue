@@ -37,6 +37,9 @@ const { base, thumbnail } = variant();
         >
             <slot name="main" />
         </div>
+        <div class="empty:hidden h-full flex items-center px-2">
+            <slot name="tag" />
+        </div>
         <div class="empty:hidden h-full flex items-center pr-4">
             <slot name="sub" />
         </div>

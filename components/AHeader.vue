@@ -12,15 +12,15 @@ const isDark = computed({
 
 <template>
     <div class="flex flex-row items-center justify-between w-full">
-        <button
-            class="justify-start items-end gap-2 flex font-['Montserrat'] text-black dark:text-white"
-        >
-            <div class="flex gap-1.5 text-5xl font-extrabold">
-                <div>Avat</div>
-                <div>io</div>
-            </div>
-            <div class="text-sm font-semibold pb-1">by Liria</div>
-        </button>
+        <div class="flex items-center gap-4">
+            <NuxtLink to="/">
+                <img
+                    width="220"
+                    :src="isDark ? '/logo_dark.svg' : '/logo_light.svg'"
+                />
+            </NuxtLink>
+            <UBadge label="Dev" :ui="{ rounded: 'rounded-full' }" />
+        </div>
         <div class="items-center flex flex-row gap-12">
             <div class="items-center gap-4 flex">
                 <div class="items-center gap-2 flex">

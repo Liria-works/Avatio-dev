@@ -106,7 +106,10 @@ const { frame, image, text } = item();
                 class="text-xs"
             />
         </div>
-        <SetupsItemCommands v-if="props.editing" />
+        <div v-if="props.editing" class="flex gap-2 items-center">
+            <AButton icon="lucide:pen-line" :iconSize="16" />
+            <AButton icon="lucide:trash" :iconSize="16" />
+        </div>
 
         <NuxtLink v-if="!outdated" :to="props.link" target="_blank">
             <button

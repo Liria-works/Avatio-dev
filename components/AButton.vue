@@ -31,8 +31,7 @@ const props = withDefaults(
         >
             <Icon
                 :name="props.icon"
-                :width="props.iconSize"
-                :height="props.iconSize"
+                :size="props.iconSize"
                 class="min-w-max min-h-max"
             />
             <span class="pr-1 text-[15px] font-medium">{{ props.text }}</span>
@@ -44,8 +43,7 @@ const props = withDefaults(
         >
             <Icon
                 :name="props.icon"
-                :width="props.iconSize"
-                :height="props.iconSize"
+                :size="props.iconSize"
                 class="min-w-max min-h-max dark:mix-blend-normal dark:opacity-100"
             />
         </button>

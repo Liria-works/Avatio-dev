@@ -196,15 +196,10 @@ onMounted(async () => {
                     title="衣服"
                     icon="lucide:shirt"
                 >
-                    <SetupsItem
+                    <SetupsItemDetail
                         v-for="i in items_cloth"
-                        :primary="i.item"
-                        :secondary="i.shop"
-                        :shop_id="i.shop_id"
-                        :thumbnail="i.thumbnail"
-                        :price="i.price"
-                        :link="i.link"
-                        size="md"
+                        :key="'item-' + i?.id"
+                        :id="i.id"
                     />
                 </SetupsCategory>
 
@@ -213,15 +208,10 @@ onMounted(async () => {
                     title="アクセサリー"
                     icon="lucide:star"
                 >
-                    <SetupsItem
+                    <SetupsItemDetail
                         v-for="i in items_accessory"
-                        :primary="i.item"
-                        :secondary="i.shop"
-                        :shop_id="i.shop_id"
-                        :thumbnail="i.thumbnail"
-                        :price="i.price"
-                        :link="i.link"
-                        size="md"
+                        :key="'item-' + i?.id"
+                        :id="i.id"
                     />
                 </SetupsCategory>
 
@@ -230,15 +220,10 @@ onMounted(async () => {
                     title="その他"
                     icon="lucide:shirt"
                 >
-                    <SetupsItem
+                    <SetupsItemDetail
                         v-for="i in items_other"
-                        :primary="i.item"
-                        :secondary="i.shop"
-                        :shop_id="i.shop_id"
-                        :thumbnail="i.thumbnail"
-                        :price="i.price"
-                        :link="i.link"
-                        size="md"
+                        :key="'item-' + i?.id"
+                        :id="i.id"
                     />
                 </SetupsCategory>
 
@@ -247,12 +232,10 @@ onMounted(async () => {
                     title="不明なアイテム"
                     icon="lucide:file-question"
                 >
-                    <SetupsItem
-                        v-for="i in items_other"
-                        :outdated="true"
-                        primary="取得に失敗しました"
-                        thumbnail="placeholder"
-                        size="md"
+                    <SetupsItemDetail
+                        v-for="i in items_outdated"
+                        :key="'item-' + i?.id"
+                        :id="i"
                     />
                 </SetupsCategory>
             </div>

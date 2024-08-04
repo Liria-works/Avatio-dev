@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col gap-4 w-full px-3">
+        <div class="flex flex-col gap-6 w-full">
             <SetupsCategory
                 title="アバターから"
                 icon="lucide:user-round"

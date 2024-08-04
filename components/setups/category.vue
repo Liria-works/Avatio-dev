@@ -15,7 +15,7 @@ const props = withDefaults(
 </script>
 
 <template>
-    <div class="flex-col items-start gap-3 flex w-full">
+    <div v-auto-animate class="flex-col items-start gap-3 flex w-full">
         <div class="flex items-center justify-between w-full">
             <div class="items-center gap-1.5 inline-flex">
                 <Icon

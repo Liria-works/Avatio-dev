@@ -18,11 +18,25 @@ const colorMode = useColorMode();
             <div
                 class="items-center justify-center gap-4 flex text-neutral-700 dark:text-white"
             >
-                <AButton
-                    text="お知らせ"
-                    icon="lucide:megaphone"
-                    :iconSize="22"
-                />
+                <NuxtLink to="/releases">
+                    <AButton
+                        text="お知らせ"
+                        icon="lucide:megaphone"
+                        :iconSize="22"
+                    />
+                </NuxtLink>
+
+                <NuxtLink to="/releases">
+                    <AButton
+                        text="フィードバック"
+                        icon="lucide:message-square"
+                        :iconSize="22"
+                    />
+                </NuxtLink>
+
+                <AButton icon="simple-icons:x" :iconSize="20" />
+                <AButton icon="simple-icons:github" :iconSize="22" />
+                <AButton icon="simple-icons:discord" class="hidden" />
 
                 <button
                     class="flex gap-2 items-center justify-center rounded-full px-4 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-700"
@@ -37,15 +51,14 @@ const colorMode = useColorMode();
                         >Liria</span
                     >
                 </button>
-                <AButton icon="simple-icons:x" :iconSize="20" />
-                <AButton icon="simple-icons:github" :iconSize="22" />
-                <AButton icon="simple-icons:discord" class="hidden" />
             </div>
             <div
                 class="items-center justify-center gap-4 flex text-neutral-700 dark:text-white"
             >
                 <UButton variant="link">Avatioについて</UButton>
-                <UButton variant="link">ガイド・FAQ</UButton>
+                <NuxtLink to="/faq">
+                    <UButton variant="link">FAQ</UButton>
+                </NuxtLink>
                 <UButton variant="link">利用規約</UButton>
                 <UButton variant="link">プライバシーポリシー</UButton>
             </div>

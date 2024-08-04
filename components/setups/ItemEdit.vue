@@ -3,18 +3,18 @@ const props = withDefaults(
     defineProps<{
         id: number;
         size?: string;
+        avatar?: boolean;
     }>(),
     {
         size: "md",
+        avatar: false,
     }
 );
 
 const detail = ref<any>({});
 const loading = ref(true);
 
-const formatPrice = (price?: number) => {
-    return price !== undefined ? `¥ ${price.toLocaleString("ja-JP")}` : "";
-};
+const unsupported = ref(false);
 
 onMounted(async () => {
     const data: any = await $fetch(
@@ -55,23 +55,28 @@ onMounted(async () => {
             </div>
         </template>
         <template #sub>
-            <NuxtLink to="/" target="_blank">
-                <button
-                    class="flex gap-3 items-center hover:bg-neutral-100 dark:hover:bg-neutral-600 py-2 px-4 rounded-lg"
-                >
-                    <div
-                        class="text-neutral-800 dark:text-neutral-200 text-md whitespace-nowrap"
-                    >
-                        {{ formatPrice(detail.price) }}
-                    </div>
-                    <Icon
-                        name="lucide:external-link"
-                        :width="18"
-                        :height="18"
-                        class="text-neutral-600 dark:text-neutral-300 min-w-max min-h-max"
-                    />
-                </button>
-            </NuxtLink>
+            <div class="flex gap-2 items-center">
+                <UCheckbox
+                    v-if="!props.avatar"
+                    v-model="unsupported"
+                    label="アバター非対応"
+                    :ui="{
+                        label: 'text-nowrap font-normal text-sm select-none',
+                    }"
+                    class="mr-4"
+                />
+                <AButton
+                    icon="lucide:pen"
+                    :iconSize="16"
+                    tooltip="ノートを追加"
+                />
+                <AButton
+                    @click="$emit('remove')"
+                    icon="lucide:trash"
+                    :iconSize="16"
+                    tooltip="アイテム削除"
+                />
+            </div>
         </template>
     </SetupsItemBase>
 </template>
