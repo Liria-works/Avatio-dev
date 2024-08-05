@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import {
+    TagsInputInput,
+    TagsInputItem,
+    TagsInputItemDelete,
+    TagsInputItemText,
+    TagsInputRoot,
+} from "radix-vue";
+
 const router = useRouter();
 const toast = useToast();
 
@@ -9,7 +17,6 @@ const actions: any = ref([
     },
 ]);
 
-const editing_title = ref(true);
 const adding = ref(false);
 const input_url = ref("");
 

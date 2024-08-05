@@ -377,6 +377,11 @@
   dependencies:
     mime "^3.0.0"
 
+"@cloudflare/workers-types@^4.20240620.0":
+  version "4.20240729.0"
+  resolved "https://registry.npmjs.org/@cloudflare/workers-types/-/workers-types-4.20240729.0.tgz"
+  integrity sha512-wfe44YQkv5T9aBr/z95P706r2/Ydg32weJYyBOhvge7FqtdY6mM7l39rybNiJrbJoyN16dd0xxyQMf23aJNC6Q==
+
 "@csstools/selector-resolve-nested@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@csstools/selector-resolve-nested/-/selector-resolve-nested-1.1.0.tgz"
@@ -654,6 +659,30 @@
     "@netlify/node-cookies" "^0.1.0"
     urlpattern-polyfill "8.0.2"
 
+"@ngrok/ngrok-win32-x64-msvc@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/@ngrok/ngrok-win32-x64-msvc/-/ngrok-win32-x64-msvc-1.4.0.tgz"
+  integrity sha512-u9BodwQRHtivQLdMGnWOhebCFwHojl6uIMPpTLw5YsT6nqyD9rnwGfphMS1r+5BTdmBZbiAYOhEgA0a+QGPaqQ==
+
+"@ngrok/ngrok@^1.3.0":
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/@ngrok/ngrok/-/ngrok-1.4.0.tgz"
+  integrity sha512-CZpBVW1vN+ZiI8sUY8+Pbf32vemMX8wBaew8sEWrn9u0dm//TExM8lyiQcV7JNuTUhNlHZE+3KZYKnaT2bUPpQ==
+  optionalDependencies:
+    "@ngrok/ngrok-android-arm-eabi" "1.4.0"
+    "@ngrok/ngrok-android-arm64" "1.4.0"
+    "@ngrok/ngrok-darwin-arm64" "1.4.0"
+    "@ngrok/ngrok-darwin-universal" "1.4.0"
+    "@ngrok/ngrok-darwin-x64" "1.4.0"
+    "@ngrok/ngrok-freebsd-x64" "1.4.0"
+    "@ngrok/ngrok-linux-arm-gnueabihf" "1.4.0"
+    "@ngrok/ngrok-linux-arm64-gnu" "1.4.0"
+    "@ngrok/ngrok-linux-arm64-musl" "1.4.0"
+    "@ngrok/ngrok-linux-x64-gnu" "1.4.0"
+    "@ngrok/ngrok-linux-x64-musl" "1.4.0"
+    "@ngrok/ngrok-win32-ia32-msvc" "1.4.0"
+    "@ngrok/ngrok-win32-x64-msvc" "1.4.0"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -713,7 +742,7 @@
   resolved "https://registry.npmjs.org/@nuxt/devalue/-/devalue-2.0.2.tgz"
   integrity sha512-GBzP8zOc7CGWyFQS6dv1lQz8VVpz5C2yRszbXufwG/9zhStTIH50EtD87NmWbTMwXDvZLNg8GIpb1UFdH93JCA==
 
-"@nuxt/devtools-kit@^1.3.2", "@nuxt/devtools-kit@^1.3.9", "@nuxt/devtools-kit@1.3.9":
+"@nuxt/devtools-kit@^1.3.2", "@nuxt/devtools-kit@^1.3.7", "@nuxt/devtools-kit@^1.3.9", "@nuxt/devtools-kit@1.3.9":
   version "1.3.9"
   resolved "https://registry.npmjs.org/@nuxt/devtools-kit/-/devtools-kit-1.3.9.tgz"
   integrity sha512-tgr/F+4BbI53/JxgaXl3cuV9dMuCXMsd4GEXN+JqtCdAkDbH3wL79GGWx0/6I9acGzRsB6UZ1H6U96nfgcIrAw==
@@ -1035,6 +1064,30 @@
     vite-plugin-checker "^0.7.2"
     vue-bundle-renderer "^2.1.0"
 
+"@nuxthub/core@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.npmjs.org/@nuxthub/core/-/core-0.7.1.tgz"
+  integrity sha512-QYuwCD+s9uESakG9ixVwXkeb+RFJqoGreugHawzJ4wYDoXClHGv2VG4wFrDt+gPNNGmgMQof366ZwONlf8DxIg==
+  dependencies:
+    "@cloudflare/workers-types" "^4.20240620.0"
+    "@nuxt/devtools-kit" "^1.3.7"
+    "@nuxt/kit" "^3.12.2"
+    "@uploadthing/mime-types" "^0.2.10"
+    citty "^0.1.6"
+    confbox "^0.1.7"
+    defu "^6.1.4"
+    destr "^2.0.3"
+    h3 "^1.12.0"
+    mime "^4.0.3"
+    nitro-cloudflare-dev "^0.1.4"
+    ofetch "^1.3.4"
+    pathe "^1.1.2"
+    pkg-types "^1.1.1"
+    ufo "^1.5.3"
+    uncrypto "^0.1.3"
+    unstorage "^1.10.2"
+    zod "^3.23.8"
+
 "@nuxtjs/color-mode@^3.4.2":
   version "3.4.2"
   resolved "https://registry.npmjs.org/@nuxtjs/color-mode/-/color-mode-3.4.2.tgz"
@@ -1085,6 +1138,16 @@
     unist-builder "^4.0.0"
     unist-util-visit "^5.0.0"
     unwasm "^0.3.9"
+
+"@nuxtjs/ngrok@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/@nuxtjs/ngrok/-/ngrok-3.0.1.tgz"
+  integrity sha512-p5+9MBesHGFZI9PlhUyYF7PKSzhkw5KHACHT9N8/CJ7aVdUS1fUavds6R2swjtjYV2X0fiQtNlv8ILYwHKfi8A==
+  dependencies:
+    "@ngrok/ngrok" "^1.3.0"
+    "@nuxt/kit" "^3.11.2"
+    consola "^3.2.3"
+    defu "^6.1.4"
 
 "@nuxtjs/supabase@^1.3.5":
   version "1.3.5"
@@ -1843,6 +1906,11 @@
     magic-string "^0.30.10"
     unplugin "^1.11.0"
     webpack-sources "^3.2.3"
+
+"@uploadthing/mime-types@^0.2.10":
+  version "0.2.10"
+  resolved "https://registry.npmjs.org/@uploadthing/mime-types/-/mime-types-0.2.10.tgz"
+  integrity sha512-kz3F0oEgAyts25NAGXlUBCWh3mXonbSOQJFGFMawHuIgbUbnzXbe4w5WI+0XdneCbjNmikfWrdWrs8m/7HATfQ==
 
 "@vercel/nft@^0.26.5":
   version "0.26.5"
@@ -5797,6 +5865,15 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+nitro-cloudflare-dev@^0.1.4:
+  version "0.1.6"
+  resolved "https://registry.npmjs.org/nitro-cloudflare-dev/-/nitro-cloudflare-dev-0.1.6.tgz"
+  integrity sha512-7YcLTJsTZSZZ89XrTEaDEnFsVWbppBgLO0Rr5n3Nf93gKHTBkBfeGH8//8FVwV2poi6SabVbJ0a2eoJRoII81w==
+  dependencies:
+    consola "^3.2.3"
+    mlly "^1.7.1"
+    pkg-types "^1.1.3"
+
 nitropack@^2.9.7:
   version "2.9.7"
   resolved "https://registry.npmjs.org/nitropack/-/nitropack-2.9.7.tgz"
@@ -8340,9 +8417,9 @@ vue-bundle-renderer@^2.1.0:
     ufo "^1.5.3"
 
 vue-demi@>=0.13.0:
-  version "0.14.9"
-  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.9.tgz"
-  integrity sha512-dC1TJMODGM8lxhP6wLToncaDPPNB3biVxxRDuNCYpuXwi70ou7NsGd97KVTJ2omepGId429JZt8oaZKeXbqxwg==
+  version "0.14.10"
+  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.10.tgz"
+  integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==
 
 vue-demi@>=0.14.8:
   version "0.14.9"
@@ -8575,6 +8652,11 @@ zip-stream@^6.0.1:
     archiver-utils "^5.0.0"
     compress-commons "^6.0.2"
     readable-stream "^4.0.0"
+
+zod@^3.23.8:
+  version "3.23.8"
+  resolved "https://registry.npmjs.org/zod/-/zod-3.23.8.tgz"
+  integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==
 
 zwitch@^2.0.0:
   version "2.0.4"

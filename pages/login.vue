@@ -1,26 +1,35 @@
-<script setup lang="ts">
-const supabase = useSupabaseClient()
+<script setup>
+const supabase = useSupabaseClient();
 
-const signInWithOAuth = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-        email: '    ',
-        password: '    ',
-    })
-    if (error) console.log(error)
-}
+const loading = ref(false);
+const email = ref("");
 
-const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) console.log(error)
-}
+const handleLogin = async () => {
+    try {
+        loading.value = true;
+        const { error } = await supabase.auth.signInWithOtp({
+            email: email.value,
+        });
+        if (error) throw error;
+        alert("Check your email for the login link!");
+    } catch (error) {
+        alert(error.error_description || error.message);
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
-
 <template>
+    <div class="w-full flex flex-col items-center gap-5">
+        <UForm class="w-96 flex flex-col gap-3" @submit="handleLogin">
+            <UFormGroup name="email">
+                <UInput v-model="email" placeholder="Email" />
+            </UFormGroup>
 
-    <div class="items-start gap-8 flex flex-col w-full">
-        <UButton label="login" block />
-
+            <UButton type="submit" :disabled="loading">
+                {{ loading ? "Loading" : "Send magic link" }}
+            </UButton>
+        </UForm>
     </div>
-
 </template>

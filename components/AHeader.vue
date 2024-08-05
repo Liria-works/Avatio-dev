@@ -1,4 +1,9 @@
 <script setup lang="ts">
+const supabase = useSupabaseClient();
+const signOut = async () => {
+    await supabase.auth.signOut();
+};
+
 const colorMode = useColorMode();
 const isDark = computed({
     get() {
@@ -74,8 +79,10 @@ const isDark = computed({
                             <NuxtLink to="/">Root</NuxtLink>
                             <NuxtLink to="/setup">Setup</NuxtLink>
                             <NuxtLink to="/edit">Edit</NuxtLink>
+                            <NuxtLink to="/login">Login</NuxtLink>
                             <NuxtLink to="/lkshjdlkasjdk">404</NuxtLink>
-                            <UButton label="Close" @click="close" />
+                            <UButton label="User" @click="close" />
+                            <UButton label="Sign out" @click="signOut" />
                         </div>
                     </template>
                 </UPopover>

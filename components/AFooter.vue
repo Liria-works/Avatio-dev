@@ -14,7 +14,7 @@ const colorMode = useColorMode();
                 :filled="true"
             />
         </UDivider>
-        <div class="flex flex-col w-full gap-6 pb-10">
+        <div class="flex flex-col w-full gap-6 pb-10 items-center">
             <div
                 class="items-center justify-center gap-4 flex text-neutral-700 dark:text-white"
             >
@@ -62,6 +62,7 @@ const colorMode = useColorMode();
                 <UButton variant="link">利用規約</UButton>
                 <UButton variant="link">プライバシーポリシー</UButton>
             </div>
+            <span class="text-neutral-500 text-sm">Copyright © 2024 Liria</span>
         </div>
     </footer>
 </template>

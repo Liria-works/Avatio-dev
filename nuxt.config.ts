@@ -11,7 +11,8 @@ export default defineNuxtConfig({
       "@nuxt/content",
       "@nuxtjs/color-mode",
       "@nuxtjs/supabase",
-      "radix-vue",
+      "@nuxtjs/ngrok",
+      "@nuxthub/core",
     ],
     compatibilityDate: "2024-07-25",
     components: [
@@ -41,5 +42,9 @@ export default defineNuxtConfig({
                 dir: "./public/icons/avatio",
             },
         ],
+    },
+    ngrok: {
+        // module options
+        authtoken: process.env.NGROK_AUTHTOKEN,
     },
 });
