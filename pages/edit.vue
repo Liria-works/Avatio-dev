@@ -38,7 +38,10 @@ const AddItem = async () => {
     );
 
     if (data.status != 200) {
-        toast.add({ title: `エラーによりアイテムの追加に失敗しました。` });
+        toast.add({
+            title: `エラーによりアイテムの追加に失敗しました。`,
+            description: data.status,
+        });
         adding.value = false;
         return;
     }

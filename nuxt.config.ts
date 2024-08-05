@@ -2,17 +2,17 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: [
-      "@nuxt/ui",
-      "@vueuse/nuxt",
-      "@nuxt/image",
-      "@nuxt/fonts",
-      "@nuxt/scripts",
-      "@formkit/auto-animate",
-      "@nuxt/content",
-      "@nuxtjs/color-mode",
-      "@nuxtjs/supabase",
-      "@nuxtjs/ngrok",
-      "@nuxthub/core",
+        "@nuxt/ui",
+        "@vueuse/nuxt",
+        "@nuxt/image",
+        "@nuxt/fonts",
+        "@nuxt/scripts",
+        "@formkit/auto-animate",
+        "@nuxt/content",
+        "@nuxtjs/color-mode",
+        "@nuxtjs/supabase",
+        "@nuxtjs/ngrok",
+        "@nuxthub/core",
     ],
     compatibilityDate: "2024-07-25",
     components: [
@@ -46,5 +46,8 @@ export default defineNuxtConfig({
     ngrok: {
         // module options
         authtoken: process.env.NGROK_AUTHTOKEN,
+    },
+    hub: {
+        database: true,
     },
 });

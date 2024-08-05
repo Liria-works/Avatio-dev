@@ -5,7 +5,6 @@
 // URLが成り立っていないとInternal server errorになるので、エラーハンドリングを追加
 
 import { serverSupabaseClient } from "#supabase/server";
-import superagent from "superagent";
 import { load } from "cheerio";
 
 const url_base = "https://booth.pm/ja/items/";
@@ -59,8 +58,32 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        const result = await superagent.get(url_base + id);
-        const $ = load(result.text);
+        const result: any = await $fetch(url_base + id, {
+            credentials: "include",
+            method: "GET",
+            scheme: "https",
+            headers: {
+                "Content-Type": "text/plain",
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Upgrade-Insecure-Requests": "1",
+                "Sec-Fetch-User": "?1",
+                "Sec-Fetch-Site": "same-origin",
+                "If-None-Match": 'W/"8d2296fdc182b5d7cfa7af601f0dc941"',
+                Priority: "u=0, i",
+                Referer: "https://booth.pm/ja/items/5532971",
+                "Sec-Ch-Ua":
+                    '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+                "Sec-Ch-Ua-Mobile": "?0",
+                "Sec-Ch-Ua-Platform": "Windows",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                "Accept-Encoding": "gzip, deflate, br, zstd",
+                "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+            },
+        });
+        const $ = load(result);
         const itemData = extractItemData($);
 
         // カテゴリIDをチェック
