@@ -4,19 +4,31 @@ const route = useRoute();
 const modal_report = ref(false);
 const setup = ref<any>(null);
 const loading = ref(true);
-const items_avatar: any = ref([]);
-const items_cloth: any = ref([]);
-const items_accessory: any = ref([]);
-const items_other: any = ref([]);
-const items_outdated: any = ref([]);
+
 const totalItems = ref(0);
 
-async function fetchBoothItem(id: number | string) {
+interface items {
+    avatar: number | null;
+    cloth: number[];
+    accessory: number[];
+    other: number[];
+    outdated: any[];
+}
+
+const Items = ref<items>({
+    avatar: null,
+    cloth: [],
+    accessory: [],
+    other: [],
+    outdated: [],
+});
+
+async function fetchBoothItem(id: number) {
     const response = await $fetch(
         `/api/GetBoothItem?id=${encodeURIComponent(id)}`
     );
     if (response.status === 200) {
-        return response.body;
+        return response;
     } else {
         console.error("Failed to fetch item data:", response);
         return null;
@@ -35,38 +47,39 @@ onMounted(async () => {
     setup.value = setupData.body;
 
     const id_avatar: number = setup.value.avatar;
-    const avatarItem = await fetchBoothItem(id_avatar);
-    if (avatarItem) {
-        items_avatar.value.push(avatarItem);
+    const avatarItem: any | null = await fetchBoothItem(id_avatar);
+    if (avatarItem.body) {
+        Items.value.avatar = avatarItem.body.id;
     } else {
         console.error("Invalid content:", id_avatar);
-        items_avatar.value.push(null);
+        Items.value.avatar = null;
     }
 
     const categoryMap: any = {
-        209: items_cloth,
-        217: items_accessory,
+        209: Items.value.cloth,
+        217: Items.value.accessory,
     };
 
-    for await (const i of setup.value.items as AsyncIterable<any>) {
-        if (i !== null && i !== undefined) {
+    for await (const i of setup.value.items) {
+        if (i) {
             const item: any = await fetchBoothItem(i);
             if (item) {
                 const targetArray =
-                    categoryMap[item.category_id] || items_other;
-                targetArray.value.push(item);
+                    categoryMap[item.body.category] || Items.value.other;
+                console.log("Item:", item);
+                targetArray.push(item.body.id);
             } else {
                 console.error("Invalid content:", i);
-                items_outdated.value.push(null);
+                Items.value.outdated.push(null);
             }
         }
     }
 
     totalItems.value =
-        items_avatar.value.length +
-        items_cloth.value.length +
-        items_accessory.value.length +
-        items_other.value.length;
+        // items_avatar.value.length +
+        Items.value.cloth.length +
+        Items.value.accessory.length +
+        Items.value.other.length;
     loading.value = false;
 });
 </script>
@@ -174,67 +187,62 @@ onMounted(async () => {
                 class="flex flex-col items-center gap-8 w-full"
             >
                 <SetupsCategory
-                    v-if="items_avatar"
+                    v-if="Items.avatar"
                     title="ベースアバター"
                     icon="lucide:person-standing"
                 >
-                    <SetupsItem
-                        v-for="i in items_avatar"
-                        :key="'item-' + i?.id"
-                        :primary="i.item"
-                        :secondary="i.shop"
-                        :shop_id="i.shop_id"
-                        :thumbnail="i.thumbnail"
-                        :price="i.price"
-                        :link="i.link"
+                    <SetupsItemDetail
+                        v-if="Items.avatar"
+                        :key="'item-' + Items.avatar"
+                        :id="Items.avatar"
                         size="lg"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="items_cloth.length"
+                    v-if="Items.cloth.length"
                     title="衣服"
                     icon="lucide:shirt"
                 >
                     <SetupsItemDetail
-                        v-for="i in items_cloth"
-                        :key="'item-' + i?.id"
-                        :id="i.id"
+                        v-for="i in Items.cloth"
+                        :key="'item-' + i"
+                        :id="i"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="items_accessory.length"
+                    v-if="Items.accessory.length"
                     title="アクセサリー"
                     icon="lucide:star"
                 >
                     <SetupsItemDetail
-                        v-for="i in items_accessory"
-                        :key="'item-' + i?.id"
-                        :id="i.id"
+                        v-for="i in Items.accessory"
+                        :key="'item-' + i"
+                        :id="i"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="items_other.length"
+                    v-if="Items.other.length"
                     title="その他"
                     icon="lucide:shirt"
                 >
                     <SetupsItemDetail
-                        v-for="i in items_other"
-                        :key="'item-' + i?.id"
-                        :id="i.id"
+                        v-for="i in Items.other"
+                        :key="'item-' + i"
+                        :id="i"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="items_outdated.length"
+                    v-if="Items.outdated.length"
                     title="不明なアイテム"
                     icon="lucide:file-question"
                 >
                     <SetupsItemDetail
-                        v-for="i in items_outdated"
-                        :key="'item-' + i?.id"
+                        v-for="i in Items.outdated"
+                        :key="'item-' + i"
                         :id="i"
                     />
                 </SetupsCategory>

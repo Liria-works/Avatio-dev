@@ -19,10 +19,11 @@ const isDark = computed({
     <div class="flex flex-row items-center justify-between w-full">
         <div class="flex items-center gap-4">
             <NuxtLink to="/">
-                <img
-                    width="220"
-                    :src="isDark ? '/logo_dark.svg' : '/logo_light.svg'"
-                />
+                <ClientOnly>
+                    <img
+                        width="220"
+                        :src="isDark ? '/logo_dark.svg' : '/logo_light.svg'"
+                /></ClientOnly>
             </NuxtLink>
             <UBadge label="Dev" :ui="{ rounded: 'rounded-full' }" />
         </div>
