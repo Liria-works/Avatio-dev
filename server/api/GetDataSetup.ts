@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
                     desc: data.desc,
                     tags: data.tags,
                     author: data.author,
-                    avatar: Number(data.avatar),
+                    avatar: data.avatar,
                     items: data.items,
                 },
             };

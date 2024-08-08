@@ -24,7 +24,7 @@ onMounted(async () => {
                 icon="lucide:folder-open"
                 class="grid grid-cols-2"
             >
-                <NuxtLink to="/edit" class="w-full">
+                <NuxtLink to="/edit" class="w-full col-span-2">
                     <UButton
                         icon="i-heroicons-plus"
                         size="xl"

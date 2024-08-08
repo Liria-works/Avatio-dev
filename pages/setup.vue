@@ -7,7 +7,7 @@ const loading = ref(true);
 
 const totalItems = ref(0);
 
-interface items {
+interface Items {
     avatar: number | null;
     cloth: number[];
     accessory: number[];
@@ -15,7 +15,7 @@ interface items {
     outdated: any[];
 }
 
-const Items = ref<items>({
+const items = ref<Items>({
     avatar: null,
     cloth: [],
     accessory: [],
@@ -46,28 +46,27 @@ onMounted(async () => {
 
     setup.value = setupData.body;
 
-    const id_avatar: number = setup.value.avatar;
-    const avatarItem: any | null = await fetchBoothItem(id_avatar);
+    const avatar: number = setup.value.avatar.id;
+    const avatarItem: any | null = await fetchBoothItem(avatar);
     if (avatarItem.body) {
-        Items.value.avatar = avatarItem.body.id;
+        items.value.avatar = avatarItem.body.id;
     } else {
-        console.error("Invalid content:", id_avatar);
-        Items.value.avatar = null;
+        console.error("Invalid content:", avatar);
+        items.value.avatar = null;
     }
 
     const categoryMap: any = {
-        209: Items.value.cloth,
-        217: Items.value.accessory,
+        209: items.value.cloth,
+        217: items.value.accessory,
     };
 
     for await (const i of setup.value.items) {
-        if (i) {
-            const item: any = await fetchBoothItem(i);
+        if (i.id) {
+            const item: any = await fetchBoothItem(i.id);
             if (item) {
                 const targetArray =
-                    categoryMap[item.body.category] || Items.value.other;
-                console.log("Item:", item);
-                targetArray.push(item.body.id);
+                    categoryMap[item.body.category] || items.value.other;
+                targetArray.push({ id: item.body.id, note: i.note });
             } else {
                 console.error("Invalid content:", i);
                 Items.value.outdated.push(null);
@@ -77,9 +76,9 @@ onMounted(async () => {
 
     totalItems.value =
         // items_avatar.value.length +
-        Items.value.cloth.length +
-        Items.value.accessory.length +
-        Items.value.other.length;
+        items.value.cloth.length +
+        items.value.accessory.length +
+        items.value.other.length;
     loading.value = false;
 });
 </script>
@@ -187,63 +186,65 @@ onMounted(async () => {
                 class="flex flex-col items-center gap-8 w-full"
             >
                 <SetupsCategory
-                    v-if="Items.avatar"
+                    v-if="items.avatar"
                     title="ベースアバター"
                     icon="lucide:person-standing"
                 >
                     <SetupsItemDetail
-                        v-if="Items.avatar"
-                        :key="'item-' + Items.avatar"
-                        :id="Items.avatar"
+                        v-if="items.avatar"
+                        :key="'item-' + items.avatar"
+                        :id="items.avatar"
+                        :note="setup.avatar.note"
                         size="lg"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="Items.cloth.length"
+                    v-if="items.cloth.length"
                     title="衣服"
                     icon="lucide:shirt"
                 >
                     <SetupsItemDetail
-                        v-for="i in Items.cloth"
-                        :key="'item-' + i"
-                        :id="i"
+                        v-for="i in items.cloth"
+                        :key="'item-' + i.id"
+                        :id="i.id"
+                        :note="i.note"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="Items.accessory.length"
+                    v-if="items.accessory.length"
                     title="アクセサリー"
                     icon="lucide:star"
                 >
                     <SetupsItemDetail
-                        v-for="i in Items.accessory"
-                        :key="'item-' + i"
-                        :id="i"
+                        v-for="i in items.accessory"
+                        :key="'item-' + i.id"
+                        :id="i.id"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="Items.other.length"
+                    v-if="items.other.length"
                     title="その他"
                     icon="lucide:shirt"
                 >
                     <SetupsItemDetail
-                        v-for="i in Items.other"
-                        :key="'item-' + i"
-                        :id="i"
+                        v-for="i in items.other"
+                        :key="'item-' + i.id"
+                        :id="i.id"
                     />
                 </SetupsCategory>
 
                 <SetupsCategory
-                    v-if="Items.outdated.length"
+                    v-if="items.outdated.length"
                     title="不明なアイテム"
                     icon="lucide:file-question"
                 >
                     <SetupsItemDetail
-                        v-for="i in Items.outdated"
-                        :key="'item-' + i"
-                        :id="i"
+                        v-for="i in items.outdated"
+                        :key="'item-' + i.id"
+                        :id="i.id"
                     />
                 </SetupsCategory>
             </div>

@@ -34,7 +34,7 @@ onMounted(async () => {
     }
     setupData.value = data.body;
 
-    const data_avatar = await fetchAvatarInfo(data.body.avatar);
+    const data_avatar = await fetchAvatarInfo(data.body.avatar.id);
     avatar.value = data_avatar.item;
     thumbnail.value = data_avatar.thumbnail;
     loading.value = false;

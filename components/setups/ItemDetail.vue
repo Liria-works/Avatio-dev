@@ -3,6 +3,7 @@ const props = withDefaults(
     defineProps<{
         id: number;
         size?: string;
+        note?: string;
     }>(),
     {
         size: "md",
@@ -26,17 +27,27 @@ onMounted(async () => {
     detail.value = data.body;
     loading.value = false;
 });
+
+import { tv } from "tailwind-variants";
+const texts = tv({
+    base: "flex flex-col gap-px overflow-clip max-w-full font-medium",
+    variants: {
+        size: {
+            lg: "gap-4",
+            md: "gap-1.5",
+            sm: "gap-px",
+        },
+    },
+});
 </script>
 
 <template>
-    <SetupsItemBase :size="props.size">
+    <SetupsItemBase :size="props.size" class="h-32">
         <template #thumbnail>
             <img class="size-full rounded-lg" :src="detail.thumbnail" />
         </template>
         <template #main>
-            <div
-                class="flex flex-col gap-1 overflow-clip max-w-full font-medium"
-            >
+            <div :class="texts({ size: props.size })">
                 <NuxtLink
                     :to="detail.link"
                     target="_blank"
@@ -60,9 +71,10 @@ onMounted(async () => {
                         {{ detail.shop }}
                     </span>
                     <Icon
+                        v-if="detail.shop_verified"
                         name="lucide:check"
                         size="16"
-                        class="text-neutral-700 dark:text-neutral-300 size-3 min-w-max min-h-max"
+                        class="flex-shrink-0 text-neutral-700 dark:text-neutral-300 size-3"
                     />
                 </NuxtLink>
             </div>
@@ -85,6 +97,19 @@ onMounted(async () => {
                     />
                 </button>
             </NuxtLink>
+        </template>
+        <template #note>
+            <div
+                v-if="props.note"
+                class="w-full px-3 py-2 gap-2 flex items-center rounded-lg bg-neutral-100 dark:bg-neutral-600"
+            >
+                <Icon
+                    name="lucide:pen-line"
+                    size="14"
+                    class="self-start flex-shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-400"
+                />
+                <span class="text-xs pb-px">{{ props.note }}</span>
+            </div>
         </template>
     </SetupsItemBase>
 </template>

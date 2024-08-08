@@ -1,4 +1,5 @@
 // ログイン済みユーザー以外の処理は弾くようにする
+// ItemのComponentにfetchしたデータを渡せるようにして、fetchが２回起こらないように
 
 import { serverSupabaseClient } from "#supabase/server";
 // import { load } from "cheerio";
@@ -50,10 +51,10 @@ export default defineEventHandler(async (event) => {
         .single();
 
     if (data) {
-        if (
-            new Date(data.updated_at) >
-            new Date(startTime - 24 * 60 * 60 * 1000)
-        ) {
+        const timeDifference = startTime - new Date(data.updated_at).getTime();
+
+        // 時間の差分が1日を超えている場合、処理継続する
+        if (timeDifference < 24 * 60 * 60 * 1000) {
             logDuration(startTime, "Database", data.name);
             return createResponse(200, "Data found in database", data, id);
         }
@@ -137,21 +138,6 @@ function extractId(query: any): string | undefined {
     }
     return undefined;
 }
-
-// function extractItemData($: any): any {
-//     const data_market = $(".market");
-//     return {
-//         id: Number(data_market.attr("data-product-id")),
-//         name: data_market.attr("data-product-name")?.toString(),
-//         price: Number(data_market.attr("data-product-price")),
-//         category: Number(data_market.attr("data-product-category")),
-//         //vrchat: $('img[alt="VRChat"]').length,
-//         shop: $(".shop__text").find("a").text(),
-//         shop_id: data_market.attr("data-product-brand")?.toString(),
-//         thumbnail: $('meta[property="og:image"]').attr("content")?.toString(),
-//         nsfw: !data_market.attr("data-product-price"),
-//     };
-// }
 
 function isAllowedCategory(categoryId: number, tags: any): boolean {
     if (allowed_category_id.includes(categoryId)) {
