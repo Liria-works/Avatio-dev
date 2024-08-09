@@ -17,13 +17,8 @@ const loading = ref(true);
 const unsupported = ref(false);
 
 onMounted(async () => {
-    const data: any = await $fetch(
-        `/api/GetBoothItem?id=${encodeURIComponent(props.id)}`
-    );
-    if (data.status != 200) {
-        return;
-    }
-    detail.value = data.body;
+    const data: any = await useFetchBooth(props.id);
+    detail.value = data;
     loading.value = false;
 });
 </script>

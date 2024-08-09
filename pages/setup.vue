@@ -23,18 +23,6 @@ const items = ref<Items>({
     outdated: [],
 });
 
-async function fetchBoothItem(id: number) {
-    const response = await $fetch(
-        `/api/GetBoothItem?id=${encodeURIComponent(id)}`
-    );
-    if (response.status === 200) {
-        return response;
-    } else {
-        console.error("Failed to fetch item data:", response);
-        return null;
-    }
-}
-
 onMounted(async () => {
     const id: any = route.query.id;
     const setupData: any = await $fetch(
@@ -47,9 +35,9 @@ onMounted(async () => {
     setup.value = setupData.body;
 
     const avatar: number = setup.value.avatar.id;
-    const avatarItem: any | null = await fetchBoothItem(avatar);
-    if (avatarItem.body) {
-        items.value.avatar = avatarItem.body.id;
+    const avatarItem: any | null = await useFetchBooth(avatar);
+    if (avatarItem) {
+        items.value.avatar = avatarItem.id;
     } else {
         console.error("Invalid content:", avatar);
         items.value.avatar = null;
@@ -62,11 +50,11 @@ onMounted(async () => {
 
     for await (const i of setup.value.items) {
         if (i.id) {
-            const item: any = await fetchBoothItem(i.id);
+            const item: any = await useFetchBooth(i.id);
             if (item) {
                 const targetArray =
-                    categoryMap[item.body.category] || items.value.other;
-                targetArray.push({ id: item.body.id, note: i.note });
+                    categoryMap[item.category] || items.value.other;
+                targetArray.push({ id: item.id, note: i.note });
             } else {
                 console.error("Invalid content:", i);
                 Items.value.outdated.push(null);

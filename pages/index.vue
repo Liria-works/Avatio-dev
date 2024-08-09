@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const user = useSupabaseUser();
+
 const setup = ref<any>(null);
 const loading = ref(true);
 
@@ -19,7 +21,26 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-col items-center gap-8 w-full">
+            <div
+                v-if="!user"
+                class="w-full p-6 gap-3 rounded-xl flex flex-col items-center text-lg font-medium dark:text-neutral-300 dark:bg-neutral-700"
+            >
+                <span>自分のアバターセットアップを共有しよう！</span>
+                <UButton
+                    icon="i-heroicons-plus"
+                    size="xl"
+                    color="primary"
+                    variant="solid"
+                    label="ログイン"
+                    :trailing="false"
+                    :ui="{
+                        rounded: 'rounded-xl',
+                        font: 'whitespace-nowrap',
+                    }"
+                />
+            </div>
             <SetupsCategory
+                v-if="user"
                 title="マイセットアップ"
                 icon="lucide:folder-open"
                 class="grid grid-cols-2"

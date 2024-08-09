@@ -21,11 +21,11 @@ export default defineNuxtConfig({
         },
     ],
     supabase: {
-        redirect: false,
+        redirect: true,
         redirectOptions: {
             login: "/login",
             callback: "/confirm",
-            include: undefined,
+            include: ["/edit"],
             exclude: [],
             cookieRedirect: false,
         },
@@ -49,5 +49,10 @@ export default defineNuxtConfig({
     },
     hub: {
         database: true,
+    },
+    runtimeConfig: {
+        public: {
+            token: "hoge",
+        },
     },
 });

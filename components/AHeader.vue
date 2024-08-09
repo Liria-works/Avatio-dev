@@ -1,5 +1,12 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
+const DebugUser = () => {
+    console.log(user.value);
+    return null;
+};
+
 const signOut = async () => {
     await supabase.auth.signOut();
 };
@@ -82,7 +89,7 @@ const isDark = computed({
                             <NuxtLink to="/edit">Edit</NuxtLink>
                             <NuxtLink to="/login">Login</NuxtLink>
                             <NuxtLink to="/lkshjdlkasjdk">404</NuxtLink>
-                            <UButton label="User" @click="close" />
+                            <UButton label="User" @click="DebugUser" />
                             <UButton label="Sign out" @click="signOut" />
                         </div>
                     </template>

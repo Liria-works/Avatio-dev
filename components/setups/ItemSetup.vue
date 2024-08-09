@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const runtimeConfig = useRuntimeConfig();
+
 export interface Props {
     id: number;
     size?: string;
@@ -13,18 +15,6 @@ const avatar = ref();
 const thumbnail = ref();
 const loading = ref(true);
 
-async function fetchAvatarInfo(id: number | string) {
-    try {
-        const response: any = await $fetch(
-            `/api/GetBoothItem?id=${encodeURIComponent(id)}`
-        );
-        return response.body;
-    } catch (error) {
-        console.error("Failed to fetch item data:", error);
-        return null;
-    }
-}
-
 onMounted(async () => {
     const data: any = await $fetch(
         `/api/GetDataSetup?id=${encodeURIComponent(props.id)}`
@@ -34,7 +24,7 @@ onMounted(async () => {
     }
     setupData.value = data.body;
 
-    const data_avatar = await fetchAvatarInfo(data.body.avatar.id);
+    const data_avatar = await useFetchBooth(data.body.avatar.id);
     avatar.value = data_avatar.item;
     thumbnail.value = data_avatar.thumbnail;
     loading.value = false;

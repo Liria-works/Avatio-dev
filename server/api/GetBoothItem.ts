@@ -1,8 +1,8 @@
-// ログイン済みユーザー以外の処理は弾くようにする
 // ItemのComponentにfetchしたデータを渡せるようにして、fetchが２回起こらないように
 
+import authMiddleware from "./Auth";
+
 import { serverSupabaseClient } from "#supabase/server";
-// import { load } from "cheerio";
 
 const url_base = "https://booth.pm/ja/items/";
 
@@ -31,6 +31,9 @@ const allowed_category_id = [
 ];
 
 export default defineEventHandler(async (event) => {
+    // トークンの無いリクエストは弾く
+    await authMiddleware(event);
+
     const startTime = Date.now(); // 処理開始時刻を記録
     const query = getQuery(event);
     const id = Number(extractId(query));

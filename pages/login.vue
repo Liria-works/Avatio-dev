@@ -11,6 +11,8 @@ const login = ref({
 const signUp = ref({
     email: "",
     password: "",
+    name: "",
+    avatar_url: "",
 });
 
 const handleLogin = async () => {
@@ -73,6 +75,12 @@ const handleSignUp = async () => {
             </UFormGroup>
             <UFormGroup name="password">
                 <UInput v-model="signUp.password" placeholder="Password" />
+            </UFormGroup>
+            <UFormGroup name="name">
+                <UInput v-model="signUp.name" placeholder="Name" />
+            </UFormGroup>
+            <UFormGroup name="avatar_url">
+                <UInput v-model="signUp.avatar_url" placeholder="Icon URL" />
             </UFormGroup>
 
             <UButton type="submit" :disabled="loading">
